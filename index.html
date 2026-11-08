@@ -2,101 +2,191 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>聚合收银台演示沙盒</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>聚合代付反诈科普沙盒</title>
     <style>
-        :root { --main-color: #FFC300; --btn-text: #000; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f7f7f7; margin: 0; padding: 15px; color: #333; }
-        .skin-bar { background: #333; color: #fff; padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 14px; text-align: center; }
-        .skin-bar select { padding: 4px 8px; margin-left: 5px; }
-        .card { background: #fff; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.02); }
-        .price-box { text-align: center; padding: 20px 0; }
-        .price-box h1 { font-size: 32px; margin: 10px 0; color: #fa5151; }
-        .btn { background-color: var(--main-color); color: var(--btn-text); width: 100%; padding: 14px; border: none; border-radius: 24px; font-size: 16px; font-weight: bold; cursor: pointer; text-align: center; margin-top: 10px; }
-        .tip { background: #fffbe6; border: 1px solid #ffe58f; padding: 10px; border-radius: 6px; font-size: 13px; color: #fa8c16; margin-bottom: 15px; }
-        /* 模拟弹窗 */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; }
-        .modal-content { background: #fff; width: 85%; max-width: 320px; padding: 20px; border-radius: 12px; text-align: center; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f7; color: #333; padding-bottom: 70px; }
+        
+        /* 顶部导航与演示步骤控制 */
+        .step-bar { background: #1c1c1e; color: #fff; padding: 10px; font-size: 13px; display: flex; justify-content: space-around; position: sticky; top: 0; z-index: 100; }
+        .step-item { padding: 4px 8px; border-radius: 4px; cursor: pointer; opacity: 0.6; }
+        .step-item.active { background: #07c160; opacity: 1; font-weight: bold; }
+
+        .container { padding: 12px; }
+        .page { display: none; }
+        .page.active { display: block; }
+
+        /* 通用卡片与按钮 */
+        .card { background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .btn { width: 100%; padding: 12px; border: none; border-radius: 22px; font-size: 15px; font-weight: bold; cursor: pointer; text-align: center; }
+        .btn-primary { background: #07c160; color: #fff; }
+
+        /* 步骤 1: 商城 */
+        .goods-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; }
+        .add-btn { background: #f0f0f0; border: none; padding: 6px 12px; border-radius: 14px; font-size: 12px; }
+
+        /* 步骤 2: 模板选择列表 */
+        .template-option { display: flex; align-items: center; justify-content: space-between; padding: 12px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 8px; }
+        .template-option.selected { border-color: #07c160; background: #f0faf4; }
+
+        /* 步骤 3: 模拟多模板收银台 UI */
+        .skin-meituan { --theme-color: #FFC300; --theme-text: #000; }
+        .skin-dewu { --theme-color: #000000; --theme-text: #fff; }
+        .skin-taobao { --theme-color: #FF5000; --theme-text: #fff; }
+
+        .pay-card { background: #fff; border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 12px; }
+        .pay-btn { background-color: var(--theme-color, #FFC300); color: var(--theme-text, #000); }
+
+        /* 模拟指纹/密码支付弹窗 */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 1000; }
+        .modal-body { background: #fff; width: 85%; max-width: 320px; border-radius: 16px; padding: 20px; text-align: center; }
     </style>
 </head>
-<body id="body" style="--main-color: #FFC300; --btn-text: #000;">
+<body>
 
-    <!-- 顶端切换控制（模拟后台配置或参数控制） -->
-    <div class="skin-bar">
-        <span>当前模拟平台：</span>
-        <select id="skinSelect" onchange="changeSkin(this.value)">
-            <option value="meituan">美团外卖（好友代付）</option>
-            <option value="dewu">得物商城（快捷收银）</option>
-            <option value="taobao">淘宝好物（代付收银台）</option>
-        </select>
+    <!-- 顶部演示流程快捷切换 -->
+    <div class="step-bar">
+        <div class="step-item active" onclick="goStep(1)">1.选商品</div>
+        <div class="step-item" onclick="goStep(2)">2.选模板</div>
+        <div class="step-item" onclick="goStep(3)">3.生成代付</div>
     </div>
 
-    <!-- 支付核心区域 -->
-    <div class="card price-box">
-        <div id="shopName" style="font-size: 14px; color: #666;">美团外卖 · 官方安全支付</div>
-        <p style="margin: 10px 0 0; font-size: 13px;">需付款</p>
-        <h1>¥ 1.00</h1>
-        <div style="font-size: 12px; color: #999;">支付剩余时间 <span id="timer">14:59</span></div>
-    </div>
+    <div class="container">
+        <!-- 环节 1：千宸商城挑选商品 -->
+        <div id="step1" class="page active">
+            <div class="card">
+                <h3>千宸商城 · 选购测试</h3>
+                <div class="goods-item">
+                    <div>
+                        <div>测试商品</div>
+                        <div style="color: #fa5151;">¥ 1.00</div>
+                    </div>
+                    <button class="add-btn" onclick="addToCart()">加入购物车</button>
+                </div>
+            </div>
+            <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
+                <div>已选: <span id="cartCount">0</span> 件</div>
+                <button class="btn btn-primary" style="width: 120px;" onclick="goStep(2)">去结算</button>
+            </div>
+        </div>
 
-    <div class="tip" id="noticeText">
-        1. 代付订单创建成功后15分钟内未付款，订单会自动取消。<br>2. 当代付订单退款成功后，实付款金额将原路退还代付人。
-    </div>
+        <!-- 环节 2：选择高仿收银台模板 -->
+        <div id="step2" class="page">
+            <div class="card">
+                <h3>选择收银台模板（模仿套路）</h3>
+                <p style="font-size: 12px; color: #888; margin-bottom: 12px;">此页面模拟诈骗后台一键切换大厂皮肤的逻辑</p>
+                
+                <div class="template-option selected" onclick="selectTemplate('meituan', this)">
+                    <span>美团外卖（好友代付）</span>
+                    <input type="radio" name="tpl" checked>
+                </div>
+                <div class="template-option" onclick="selectTemplate('dewu', this)">
+                    <span>得物商城（快捷收银）</span>
+                    <input type="radio" name="tpl">
+                </div>
+                <div class="template-option" onclick="selectTemplate('taobao', this)">
+                    <span>淘宝好物（找人代付）</span>
+                    <input type="radio" name="tpl">
+                </div>
 
-    <div class="card">
-        <div style="font-weight: bold; margin-bottom: 10px;">订单摘要</div>
-        <div style="display: flex; justify-content: space-between; font-size: 14px;">
-            <span>测试商品 x 1</span>
-            <span style="font-weight: bold;">¥ 1.00</span>
+                <button class="btn btn-primary" style="margin-top: 15px;" onclick="goStep(3)">生成代付页面</button>
+            </div>
+        </div>
+
+        <!-- 环节 3：生成的仿冒代付页面 -->
+        <div id="step3" class="page">
+            <div class="pay-card" id="paySkinBox">
+                <div id="tplTitle" style="font-size: 14px; font-weight: bold;">美团外卖 · 好友代付</div>
+                <p style="font-size: 12px; color: #888; margin-top: 10px;">需付款</p>
+                <h1 style="font-size: 32px; color: #fa5151; margin: 8px 0;">¥ 1.00</h1>
+                <p style="font-size: 12px; color: #999;">支付剩余时间 14:59</p>
+            </div>
+
+            <div class="card" style="background: #fffbe6; color: #fa8c16; font-size: 12px;">
+                1. 代付订单创建成功后15分钟内未付款，订单会自动取消。<br>
+                2. 当代付订单退款成功后，实付款金额将原路退还代付人。
+            </div>
+
+            <div class="card">
+                <h4>订单摘要</h4>
+                <div style="display:flex; justify-content:space-between; margin-top:8px; font-size:14px;">
+                    <span>测试商品 x 1</span>
+                    <b>¥ 1.00</b>
+                </div>
+            </div>
+
+            <button class="btn pay-btn" id="payBtn" onclick="triggerPay()">为好友买单</button>
         </div>
     </div>
 
-    <button class="btn" id="payBtn" onclick="simulatePay()">为好友买单</button>
-
-    <!-- 模拟支付成功或提示弹窗 -->
+    <!-- 安全警示弹窗 -->
     <div class="modal" id="payModal">
-        <div class="modal-content">
-            <h3>⚠️ 演示拦截提示</h3>
-            <p id="modalMsg" style="font-size: 14px; color: #666; text-align: left;"></p>
-            <button class="btn" onclick="closeModal()" style="margin-top: 15px; padding: 8px;">我知道了</button>
+        <div class="modal-body">
+            <h3 style="color: #fa5151; margin-bottom: 10px;">⚠️ 反诈提醒</h3>
+            <p style="font-size: 13px; text-align: left; color: #666; line-height: 1.5;">
+                页面显示的UI虽然是“大厂代付”，但<b>真实账单中的收款方绝对不是大厂官方</b>，而是第三方黑灰产或个人商户！请务必核对付款指纹弹窗上的真实商户名称！
+            </p>
+            <button class="btn btn-primary" style="margin-top: 15px; padding: 8px;" onclick="closeModal()">我明白了</button>
         </div>
     </div>
 
     <script>
-        function changeSkin(skin) {
-            const body = document.getElementById('body');
-            const shopName = document.getElementById('shopName');
-            const noticeText = document.getElementById('noticeText');
-            const payBtn = document.getElementById('payBtn');
+        let currentSkin = 'meituan';
+        let cart = 0;
 
-            if (skin === 'meituan') {
-                body.style.setProperty('--main-color', '#FFC300');
-                body.style.setProperty('--btn-text', '#000');
-                shopName.innerText = '美团外卖 · 好友代付';
-                noticeText.innerHTML = '1. 代付订单创建成功后15分钟内未付款。<br>2. 实付款金额将原路退还代付人。';
-                payBtn.innerText = '为好友买单';
-            } else if (skin === 'dewu') {
-                body.style.setProperty('--main-color', '#000000');
-                body.style.setProperty('--btn-text', '#ffffff');
-                shopName.innerText = '得物 APP · 极速收银台';
-                noticeText.innerHTML = '1. 认证安全交易，由第三方担保支付。<br>2. 极速发货，不支持无理由退货。';
-                payBtn.innerText = '确认支付 ¥1.00';
-            } else if (skin === 'taobao') {
-                body.style.setProperty('--main-color', '#FF5000');
-                body.style.setProperty('--btn-text', '#ffffff');
-                shopName.innerText = '淘宝好物 · 找人代付';
-                noticeText.innerHTML = '1. 朋友代付：请确认对方身份再付款。<br>2. 交易产生纠纷由买卖双方协商。';
-                payBtn.innerText = '找Ta代付';
-            }
+        function goStep(step) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.step-item').forEach(s => s.classList.remove('active'));
+            
+            document.getElementById('step' + step).classList.add('active');
+            document.querySelectorAll('.step-item')[step - 1].classList.add('active');
         }
 
-        function simulatePay() {
-            const modal = document.getElementById('payModal');
-            const modalMsg = document.getElementById('modalMsg');
-            const skin = document.getElementById('skinSelect').value;
-            
-            modalMsg.innerHTML = `您当前点击了<b>${skin}</b>模板的支付按钮。<br><br><b>前端逻辑说明：</b>此处不需要后端，完全可以由前端直接弹起密码框、跳转到模拟账单，用来直观展示“页面UI可随意切换，但底层收款方不一致”的防骗核心。`;
-            modal.style.display = 'flex';
+        function addToCart() {
+            cart++;
+            document.getElementById('cartCount').innerText = cart;
+        }
+
+        function selectTemplate(skin, el) {
+            currentSkin = skin;
+            document.querySelectorAll('.template-option').forEach(o => o.classList.remove('selected'));
+            el.classList.add('selected');
+            el.querySelector('input').checked = true;
+        }
+
+        function goStep3() {
+            const box = document.getElementById('paySkinBox');
+            const title = document.getElementById('tplTitle');
+            const btn = document.getElementById('payBtn');
+
+            box.className = 'pay-card skin-' + currentSkin;
+
+            if (currentSkin === 'meituan') {
+                title.innerText = '美团外卖 · 好友代付';
+                btn.innerText = '为好友买单';
+                btn.style.backgroundColor = '#FFC300';
+                btn.style.color = '#000';
+            } else if (currentSkin === 'dewu') {
+                title.innerText = '得物 APP · 快捷收银台';
+                btn.innerText = '确认支付 ¥1.00';
+                btn.style.backgroundColor = '#000000';
+                btn.style.color = '#fff';
+            } else if (currentSkin === 'taobao') {
+                title.innerText = '淘宝好物 · 找人代付';
+                btn.innerText = '找Ta代付';
+                btn.style.backgroundColor = '#FF5000';
+                btn.style.color = '#fff';
+            }
+
+            goStep(3);
+        }
+
+        // 覆盖原始跳转
+        document.querySelectorAll('.btn-primary')[1].setAttribute('onclick', 'goStep3()');
+
+        function triggerPay() {
+            document.getElementById('payModal').style.display = 'flex';
         }
 
         function closeModal() {
