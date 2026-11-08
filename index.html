@@ -1,348 +1,795 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" class="h-full bg-gray-100">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>橘子商城</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>NEXUS 精选商城</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        nexusRed: '#FF2442',
+                        nexusDark: '#111827',
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", STHeiti, Microsoft Yahei, sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: #f6f6f6; color: #333; }
-        
-        .page-container { display: none; min-height: 100vh; }
-        .page-container.active { display: block; }
-
-        /* 商城首页 */
-        .shop-header { background: #fff; padding: 10px 15px; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid #f0f0f0; }
-        .shop-title-bar { display: flex; justify-content: space-between; align-items: center; font-size: 16px; font-weight: bold; margin-bottom: 8px; }
-        .search-box { background: #f2f3f5; border-radius: 18px; padding: 6px 14px; font-size: 13px; color: #999; display: flex; align-items: center; }
-        
-        .toast { position: fixed; top: 40%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.75); color: #fff; padding: 10px 20px; border-radius: 20px; font-size: 13px; display: none; z-index: 999; }
-
-        .banner { margin: 12px 15px; background: linear-gradient(135deg, #1e3c72, #2a5298); border-radius: 14px; padding: 24px 20px; color: #fff; }
-        .banner h2 { font-size: 22px; font-weight: bold; }
-        .banner p { font-size: 12px; opacity: 0.8; margin-top: 4px; }
-        .banner-tags { display: flex; gap: 8px; margin-top: 12px; }
-        .banner-tag { background: rgba(255,255,255,0.2); padding: 3px 8px; border-radius: 10px; font-size: 10px; }
-
-        .category-tabs { display: flex; overflow-x: auto; padding: 5px 15px; gap: 10px; background: #fff; margin-bottom: 10px; }
-        .cat-item { padding: 6px 14px; border-radius: 14px; font-size: 13px; color: #666; white-space: nowrap; background: #f6f6f6; }
-        .cat-item.active { background: #4f46e5; color: #fff; font-weight: 500; }
-
-        .section-title { font-size: 15px; font-weight: bold; padding: 0 15px; margin: 15px 0 10px; display: flex; align-items: center; }
-        .section-title::before { content: ""; width: 4px; height: 14px; background: #4f46e5; margin-right: 6px; border-radius: 2px; }
-
-        .goods-list { padding: 0 15px 80px; }
-        .goods-item { background: #fff; border-radius: 12px; padding: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-        .goods-name { font-size: 14px; font-weight: 500; color: #222; }
-        .goods-price { font-size: 16px; color: #ff3b30; font-weight: bold; margin-top: 4px; }
-        .goods-price small { font-size: 11px; }
-        .add-cart-btn { background: #eeeffe; color: #4f46e5; border: none; width: 32px; height: 32px; border-radius: 50%; font-size: 18px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-
-        .shop-cart-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #fff; border-top: 1px solid #eee; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; z-index: 99; }
-        .cart-icon-box { position: relative; background: #4f46e5; width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 20px; }
-        .cart-badge { position: absolute; top: -3px; right: -3px; background: #ff3b30; color: #fff; border-radius: 10px; padding: 1px 6px; font-size: 10px; font-weight: bold; border: 2px solid #fff; }
-        .pay-submit-btn { background: #4f46e5; color: #fff; border: none; padding: 10px 24px; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; }
-
-        /* 选择收银台模板界面 */
-        .pay-select-header { background: #fff; padding: 12px 15px; font-size: 16px; font-weight: bold; text-align: center; border-bottom: 1px solid #f0f0f0; position: relative; }
-        .back-icon { position: absolute; left: 15px; top: 12px; font-size: 18px; color: #666; cursor: pointer; }
-
-        .order-summary-card { background: #fff; margin: 15px; border-radius: 12px; padding: 15px; }
-        .summary-row { display: flex; justify-content: space-between; font-size: 13px; color: #666; margin-bottom: 8px; }
-        .summary-total { display: flex; justify-content: space-between; font-size: 15px; font-weight: bold; color: #333; border-top: 1px dashed #eee; padding-top: 10px; margin-top: 6px; }
-
-        .tpl-modal-box { background: #fff; margin: 0 15px; border-radius: 14px; overflow: hidden; }
-        .tpl-title { padding: 14px 15px; font-size: 14px; font-weight: bold; color: #333; border-bottom: 1px solid #f6f6f6; }
-        .tpl-list { max-height: 380px; overflow-y: auto; }
-        .tpl-option { display: flex; align-items: center; justify-content: space-between; padding: 14px 15px; border-bottom: 1px solid #f9f9f9; cursor: pointer; }
-        .tpl-option-left { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 500; }
-        .tpl-icon { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 13px; color: #fff; font-weight: bold; }
-        .radio-dot { width: 18px; height: 18px; border: 2px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-        .tpl-option.active .radio-dot { border-color: #07c160; background: #07c160; }
-        .tpl-option.active .radio-dot::after { content: ""; width: 6px; height: 6px; background: #fff; border-radius: 50%; }
-
-        .confirm-gen-btn { margin: 20px 15px; width: calc(100% - 30px); background: #07c160; color: #fff; border: none; padding: 14px; border-radius: 22px; font-size: 15px; font-weight: bold; cursor: pointer; text-align: center; }
-
-        /* 动态收银台通用样式 */
-        .pay-page { background: #f4f4f4; min-height: 100vh; }
-        .pay-header { background: #fff; padding: 12px 15px; display: flex; align-items: center; justify-content: space-between; font-size: 16px; font-weight: bold; border-bottom: 1px solid #eee; }
-        .pay-user-box { background: #fff; padding: 12px 15px; display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 13px; color: #333; }
-        .pay-avatar { width: 36px; height: 36px; border-radius: 50%; background: #ccc; display: flex; align-items: center; justify-content: center; font-size: 16px; }
-
-        .pay-card { background: #fff; margin: 0 12px 10px; border-radius: 12px; padding: 24px 15px 20px; text-align: center; }
-        .pay-amount { font-size: 34px; font-weight: bold; color: #333; margin: 8px 0; }
-        .pay-amount span { font-size: 20px; }
-        .pay-timer { font-size: 12px; color: #666; display: flex; align-items: center; justify-content: center; gap: 4px; }
-        .timer-badge { background: #333; color: #fff; padding: 1px 4px; border-radius: 3px; font-weight: bold; }
-
-        .pay-notice { background: #fffbe6; margin: 0 12px 10px; border-radius: 8px; padding: 12px; font-size: 11px; color: #d9822b; line-height: 1.6; }
-        .pay-action-btn { border: none; width: calc(100% - 24px); margin: 0 12px 15px; padding: 14px; border-radius: 22px; font-size: 16px; font-weight: bold; cursor: pointer; text-align: center; }
-        
-        .pay-order-box { background: #fff; margin: 0 12px; border-radius: 12px; padding: 15px; }
-        .pay-footer-logo { text-align: center; font-size: 11px; color: #ccc; margin-top: 30px; padding-bottom: 20px; }
+        /* 隐藏滚动条但允许滚动 */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        /* Safe Area Padding for iOS Devices */
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom, 1rem); }
+        .pt-safe { padding-top: env(safe-area-inset-top, 0.5rem); }
+        body { -webkit-tap-highlight-color: transparent; user-select: none; }
     </style>
 </head>
-<body>
+<body class="h-full font-sans antialiased text-gray-900 select-none bg-gray-100 flex flex-col justify-between overflow-x-hidden">
 
-    <div id="toast" class="toast">已加入购物车</div>
+    <!-- 全局应用容器 (手机尺寸约束) -->
+    <div id="app" class="relative max-w-md mx-auto w-full h-full bg-gray-50 flex flex-col shadow-2xl overflow-hidden">
 
-    <!-- 1. 商城首页 -->
-    <div id="pageShop" class="page-container active">
-        <div class="shop-header">
-            <div class="shop-title-bar">
-                <span>橘子商城</span>
-                <span style="font-size: 18px;">···</span>
+        <!-- ==================== 1. 商城顶部搜索 & 导航栏 ==================== -->
+        <header id="main-header" class="sticky top-0 z-20 bg-white border-b border-gray-100 pt-safe">
+            <div class="px-4 py-2 flex items-center justify-between gap-3">
+                <!-- 品牌 Logo / 暗道触控区 -->
+                <div onclick="triggerSecretMenu()" class="flex items-center gap-1 cursor-pointer">
+                    <span class="text-xl font-extrabold tracking-wider text-nexusRed">NEXUS</span>
+                    <span class="text-xs font-semibold px-1.5 py-0.5 bg-nexusRed/10 text-nexusRed rounded">精选</span>
+                </div>
+                <!-- 搜索框 -->
+                <div class="flex-1 relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                    <input type="text" placeholder="搜索全球好物、安睡裤..." class="w-full pl-8 pr-4 py-1.5 bg-gray-100 text-xs rounded-full focus:outline-none focus:ring-1 focus:ring-nexusRed">
+                </div>
+                <!-- 消息通知 -->
+                <button class="relative p-1 text-gray-600">
+                    <i class="fa-regular fa-bell text-lg"></i>
+                    <span class="absolute top-0 right-0 w-2 h-2 bg-nexusRed rounded-full"></span>
+                </button>
             </div>
-            <div class="search-box">🔍 搜索商品...</div>
-        </div>
 
-        <div class="banner">
-            <h2>橘子商城</h2>
-            <p>精选好物 · 轻松下单</p>
-            <div class="banner-tags">
-                <span class="banner-tag">NEW</span>
-                <span class="banner-tag">品质优选</span>
-                <span class="banner-tag">快捷支付</span>
+            <!-- 分类 Tabs -->
+            <div id="category-tabs" class="flex items-center gap-6 px-4 py-2 overflow-x-auto no-scrollbar text-xs font-medium text-gray-600 border-t border-gray-50">
+                <span class="text-nexusRed font-bold border-b-2 border-nexusRed pb-1 whitespace-nowrap cursor-pointer">推荐</span>
+                <span class="whitespace-nowrap hover:text-gray-900 cursor-pointer">数码极客</span>
+                <span class="whitespace-nowrap hover:text-gray-900 cursor-pointer">个人护理</span>
+                <span class="whitespace-nowrap hover:text-gray-900 cursor-pointer">服饰鞋包</span>
+                <span class="whitespace-nowrap hover:text-gray-900 cursor-pointer">美妆奢品</span>
+                <span class="whitespace-nowrap hover:text-gray-900 cursor-pointer">居家生活</span>
+            </div>
+        </header>
+
+        <!-- ==================== 2. 主要内容滚动区 ==================== -->
+        <main id="main-scroll" class="flex-1 overflow-y-auto no-scrollbar pb-24">
+            
+            <!-- 视图 A: 首页 Tab -->
+            <section id="tab-home" class="view-tab block">
+                <!-- 轮播图广告 Banner -->
+                <div class="p-3">
+                    <div class="relative w-full h-36 bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 rounded-2xl overflow-hidden shadow-md flex items-center justify-between p-5 text-white">
+                        <div>
+                            <span class="text-xs bg-white/20 px-2 py-0.5 rounded-full uppercase tracking-wider font-semibold">狂欢周年庆</span>
+                            <h2 class="text-xl font-bold mt-1">爆款好物 1折起</h2>
+                            <p class="text-xs text-white/80 mt-1">全场包邮 · 支持好友代付</p>
+                        </div>
+                        <i class="fa-solid fa-bag-shopping text-6xl text-white/20"></i>
+                    </div>
+                </div>
+
+                <!-- 金刚区 / 图标导航 -->
+                <div class="grid grid-cols-5 gap-2 px-3 py-2 text-center text-xs text-gray-700 bg-white mx-3 rounded-xl shadow-sm">
+                    <div class="flex flex-col items-center gap-1 cursor-pointer" onclick="showToast('专区即将上线')">
+                        <div class="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center text-nexusRed"><i class="fa-solid fa-bolt text-lg"></i></div>
+                        <span>限时秒杀</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-1 cursor-pointer" onclick="showToast('请在购物车查看')">
+                        <div class="w-10 h-10 rounded-full bg-pink-50 flex items-center justify-center text-pink-500"><i class="fa-solid fa-gift text-lg"></i></div>
+                        <span>代付福利</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-1 cursor-pointer" onclick="showToast('已领最大优惠券')">
+                        <div class="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center text-amber-500"><i class="fa-solid fa-ticket text-lg"></i></div>
+                        <span>领券中心</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-1 cursor-pointer" onclick="switchTab('cart')">
+                        <div class="w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center text-purple-500"><i class="fa-solid fa-cart-shopping text-lg"></i></div>
+                        <span>热销榜单</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-1 cursor-pointer" onclick="switchTab('user')">
+                        <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-500"><i class="fa-solid fa-shield-heart text-lg"></i></div>
+                        <span>会员尊享</span>
+                    </div>
+                </div>
+
+                <!-- 推荐商品流 Grid -->
+                <div class="p-3">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="font-bold text-gray-900 text-sm flex items-center gap-1.5">
+                            <span class="w-1 h-4 bg-nexusRed rounded-full"></span> 猜你喜欢
+                        </h3>
+                        <span class="text-xs text-gray-400">实时热销更新</span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3" id="product-grid">
+                        <!-- 商品 1: 安睡裤 (默认演示核心商品) -->
+                        <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 flex flex-col justify-between cursor-pointer active:scale-95 transition" onclick="openProductDetail('安睡裤', 68.80, 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=500&auto=format&fit=crop&q=60')">
+                            <div class="relative h-40 bg-gray-50 flex items-center justify-center overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=500&auto=format&fit=crop&q=60" class="object-cover w-full h-full" alt="安睡裤">
+                                <span class="absolute top-2 left-2 bg-nexusRed text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">爆款推荐</span>
+                            </div>
+                            <div class="p-2.5">
+                                <h4 class="text-xs font-semibold text-gray-800 line-clamp-2">【特惠组合装】舒适全棉极薄安睡裤 (L码 12片/包)</h4>
+                                <div class="mt-2 flex items-baseline justify-between">
+                                    <div class="text-nexusRed font-bold text-sm">
+                                        <span class="text-[10px]">¥</span>68.80
+                                    </div>
+                                    <span class="text-[10px] text-gray-400">已售 2.4万+</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 商品 2: 降噪耳机 -->
+                        <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 flex flex-col justify-between cursor-pointer active:scale-95 transition" onclick="openProductDetail('无线头戴式降噪耳机', 299.00, 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&auto=format&fit=crop&q=60')">
+                            <div class="relative h-40 bg-gray-50 flex items-center justify-center overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&auto=format&fit=crop&q=60" class="object-cover w-full h-full" alt="耳机">
+                            </div>
+                            <div class="p-2.5">
+                                <h4 class="text-xs font-semibold text-gray-800 line-clamp-2">主动降噪无线蓝牙头戴式耳机 高解析音质</h4>
+                                <div class="mt-2 flex items-baseline justify-between">
+                                    <div class="text-nexusRed font-bold text-sm">
+                                        <span class="text-[10px]">¥</span>299.00
+                                    </div>
+                                    <span class="text-[10px] text-gray-400">已售 8500+</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 商品 3: 智能手表 -->
+                        <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 flex flex-col justify-between cursor-pointer active:scale-95 transition" onclick="openProductDetail('智能运动手表 Pro', 499.00, 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&auto=format&fit=crop&q=60')">
+                            <div class="relative h-40 bg-gray-50 flex items-center justify-center overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&auto=format&fit=crop&q=60" class="object-cover w-full h-full" alt="手表">
+                            </div>
+                            <div class="p-2.5">
+                                <h4 class="text-xs font-semibold text-gray-800 line-clamp-2">智能运动手表 心率血氧监测 长续航防水</h4>
+                                <div class="mt-2 flex items-baseline justify-between">
+                                    <div class="text-nexusRed font-bold text-sm">
+                                        <span class="text-[10px]">¥</span>499.00
+                                    </div>
+                                    <span class="text-[10px] text-gray-400">已售 1.1万+</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 商品 4: 保温杯 -->
+                        <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 flex flex-col justify-between cursor-pointer active:scale-95 transition" onclick="openProductDetail('极简便携保温杯', 45.00, 'https://images.unsplash.com/photo-1517256064527-09c73fc73e38?w=500&auto=format&fit=crop&q=60')">
+                            <div class="relative h-40 bg-gray-50 flex items-center justify-center overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1517256064527-09c73fc73e38?w=500&auto=format&fit=crop&q=60" class="object-cover w-full h-full" alt="水杯">
+                            </div>
+                            <div class="p-2.5">
+                                <h4 class="text-xs font-semibold text-gray-800 line-clamp-2">316不锈钢车载保温杯 长效保温 480ml</h4>
+                                <div class="mt-2 flex items-baseline justify-between">
+                                    <div class="text-nexusRed font-bold text-sm">
+                                        <span class="text-[10px]">¥</span>45.00
+                                    </div>
+                                    <span class="text-[10px] text-gray-400">已售 5000+</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 视图 B: 分类 Tab -->
+            <section id="tab-category" class="view-tab hidden p-4">
+                <h3 class="text-base font-bold text-gray-900 mb-3">全部分类</h3>
+                <div class="grid grid-cols-3 gap-3">
+                    <div class="bg-white p-3 rounded-xl text-center shadow-sm cursor-pointer" onclick="switchTab('home')">
+                        <i class="fa-solid fa-shirt text-2xl text-pink-500 mb-1"></i>
+                        <p class="text-xs font-medium">服饰内衣</p>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl text-center shadow-sm cursor-pointer" onclick="switchTab('home')">
+                        <i class="fa-solid fa-mobile-screen-button text-2xl text-blue-500 mb-1"></i>
+                        <p class="text-xs font-medium">数码家电</p>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl text-center shadow-sm cursor-pointer" onclick="switchTab('home')">
+                        <i class="fa-solid fa-spray-can-sparkles text-2xl text-purple-500 mb-1"></i>
+                        <p class="text-xs font-medium">美妆护肤</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 视图 C: 购物车 Tab -->
+            <section id="tab-cart" class="view-tab hidden p-3">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="font-bold text-gray-900 text-base">购物车 (<span id="cart-count-header">1</span>)</h3>
+                    <span class="text-xs text-nexusRed cursor-pointer" onclick="showToast('已清空无效商品')">领券减免</span>
+                </div>
+
+                <!-- 购物车卡片 -->
+                <div class="bg-white rounded-xl p-3 shadow-sm mb-3">
+                    <div class="flex items-center gap-2 mb-2 pb-2 border-b border-gray-50">
+                        <input type="checkbox" checked class="accent-nexusRed w-4 h-4 rounded">
+                        <span class="text-xs font-bold text-gray-800">NEXUS 自营旗舰店</span>
+                    </div>
+
+                    <div id="cart-item-list" class="flex gap-3 items-center py-2">
+                        <input type="checkbox" checked class="accent-nexusRed w-4 h-4 rounded">
+                        <img id="cart-item-img" src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=500&auto=format&fit=crop&q=60" class="w-16 h-16 rounded-lg object-cover bg-gray-100" alt="安睡裤">
+                        <div class="flex-1">
+                            <h4 id="cart-item-title" class="text-xs font-semibold text-gray-800 line-clamp-1">【特惠组合装】舒适全棉极薄安睡裤</h4>
+                            <p class="text-[10px] text-gray-400 bg-gray-50 px-1.5 py-0.5 rounded inline-block mt-1">规格: L码 12片/包</p>
+                            <div class="flex items-center justify-between mt-2">
+                                <span class="text-nexusRed font-bold text-xs">¥<span id="cart-item-price">68.80</span></span>
+                                <div class="flex items-center border border-gray-200 rounded text-xs">
+                                    <button class="px-2 py-0.5 text-gray-500" onclick="updateCartQty(-1)">-</button>
+                                    <span id="cart-item-qty" class="px-2 py-0.5 bg-gray-50">1</span>
+                                    <button class="px-2 py-0.5 text-gray-500" onclick="updateCartQty(1)">+</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 视图 D: 我的 (个人中心 Tab) -->
+            <section id="tab-user" class="view-tab hidden">
+                <!-- 个人信息 Header -->
+                <div class="bg-gradient-to-b from-red-500 to-nexusRed p-4 text-white">
+                    <div class="flex items-center gap-3 mt-2">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=60" class="w-14 h-14 rounded-full border-2 border-white/50 object-cover" alt="用户头像">
+                        <div>
+                            <h3 class="font-bold text-base flex items-center gap-2">
+                                反诈实操学员 
+                                <span class="bg-amber-400 text-gray-900 text-[10px] font-extrabold px-1.5 py-0.5 rounded-full">VIP 8</span>
+                            </h3>
+                            <p class="text-xs text-white/80 mt-0.5">账号: 138****8888</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 订单状态卡片 -->
+                <div class="bg-white rounded-xl mx-3 -mt-4 p-3 shadow-md relative z-10">
+                    <div class="flex justify-between items-center pb-2 border-b border-gray-100 text-xs">
+                        <span class="font-bold text-gray-800">我的订单</span>
+                        <span class="text-gray-400 text-[11px] cursor-pointer" onclick="showToast('没有更多历史订单')">全部订单 &gt;</span>
+                    </div>
+                    <div class="grid grid-cols-4 gap-2 pt-3 text-center text-xs text-gray-600">
+                        <div class="flex flex-col items-center cursor-pointer" onclick="switchTab('cart')">
+                            <i class="fa-regular fa-credit-card text-xl text-nexusRed mb-1"></i>
+                            <span>待付款</span>
+                        </div>
+                        <div class="flex flex-col items-center cursor-pointer" onclick="showToast('商品准备发货中')">
+                            <i class="fa-solid fa-box text-xl text-amber-500 mb-1"></i>
+                            <span>待发货</span>
+                        </div>
+                        <div class="flex flex-col items-center cursor-pointer" onclick="showToast('暂无在途快递')">
+                            <i class="fa-solid fa-truck-fast text-xl text-blue-500 mb-1"></i>
+                            <span>待收货</span>
+                        </div>
+                        <div class="flex flex-col items-center cursor-pointer" onclick="showToast('无售后申请记录')">
+                            <i class="fa-regular fa-comment-dots text-xl text-purple-500 mb-1"></i>
+                            <span>退款/售后</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 常用服务列表 -->
+                <div class="bg-white rounded-xl mx-3 mt-3 p-3 shadow-sm text-xs">
+                    <div class="flex items-center justify-between py-2.5 border-b border-gray-50 cursor-pointer" onclick="showToast('收获地址：北京市海淀区中关村南大街1号')">
+                        <span class="text-gray-700 flex items-center gap-2"><i class="fa-solid fa-location-dot text-gray-400"></i> 收货地址管理</span>
+                        <i class="fa-solid fa-chevron-right text-gray-300"></i>
+                    </div>
+                    <div class="flex items-center justify-between py-2.5 border-b border-gray-50 cursor-pointer" onclick="triggerSecretMenu()">
+                        <span class="text-gray-700 flex items-center gap-2"><i class="fa-solid fa-gear text-gray-400"></i> 安全演练通道入口</span>
+                        <i class="fa-solid fa-chevron-right text-gray-300"></i>
+                    </div>
+                    <div class="flex items-center justify-between py-2.5 cursor-pointer" onclick="showToast('反诈教学专用 Sandbox v2.4')">
+                        <span class="text-gray-700 flex items-center gap-2"><i class="fa-solid fa-circle-info text-gray-400"></i> 关于 NEXUS 精选</span>
+                        <i class="fa-solid fa-chevron-right text-gray-300"></i>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- ==================== 3. 底部吸底购物车结算条 (仅在购物车 Tab 显示) ==================== -->
+        <div id="cart-bottom-bar" class="hidden fixed bottom-14 max-w-md w-full bg-white border-t border-gray-100 px-4 py-2 flex items-center justify-between z-20">
+            <div class="flex items-center gap-2">
+                <input type="checkbox" checked class="accent-nexusRed w-4 h-4 rounded">
+                <span class="text-xs text-gray-600">全选</span>
+            </div>
+            <div class="flex items-center gap-3">
+                <div class="text-right">
+                    <span class="text-xs text-gray-500">合计:</span>
+                    <span class="text-nexusRed font-bold text-base">¥<span id="cart-total-price">68.80</span></span>
+                </div>
+                <button onclick="goToCheckout()" class="bg-nexusRed hover:bg-red-600 text-white font-bold px-5 py-2 rounded-full text-xs shadow-md active:scale-95 transition">
+                    去结算 (<span id="cart-total-count">1</span>)
+                </button>
             </div>
         </div>
 
-        <div class="category-tabs">
-            <div class="cat-item active">全部</div>
-            <div class="cat-item">数码电子</div>
-            <div class="cat-item">生活服务</div>
-            <div class="cat-item">出行旅游</div>
-        </div>
+        <!-- ==================== 4. 底部 Navigation Bar ==================== -->
+        <nav class="fixed bottom-0 max-w-md w-full bg-white/95 backdrop-blur-md border-t border-gray-200 grid grid-cols-4 py-1.5 z-30 pb-safe">
+            <button onclick="switchTab('home')" id="nav-home" class="flex flex-col items-center justify-center text-nexusRed">
+                <i class="fa-solid fa-house text-lg"></i>
+                <span class="text-[10px] font-medium mt-0.5">首页</span>
+            </button>
+            <button onclick="switchTab('category')" id="nav-category" class="flex flex-col items-center justify-center text-gray-400 hover:text-gray-600">
+                <i class="fa-solid fa-border-all text-lg"></i>
+                <span class="text-[10px] font-medium mt-0.5">分类</span>
+            </button>
+            <button onclick="switchTab('cart')" id="nav-cart" class="flex flex-col items-center justify-center text-gray-400 hover:text-gray-600 relative">
+                <i class="fa-solid fa-cart-shopping text-lg"></i>
+                <span class="text-[10px] font-medium mt-0.5">购物车</span>
+                <span id="badge-cart" class="absolute top-0 right-5 w-4 h-4 bg-nexusRed text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white">1</span>
+            </button>
+            <button onclick="switchTab('user')" id="nav-user" class="flex flex-col items-center justify-center text-gray-400 hover:text-gray-600">
+                <i class="fa-regular fa-user text-lg"></i>
+                <span class="text-[10px] font-medium mt-0.5">我的</span>
+            </button>
+        </nav>
 
-        <div class="section-title">热门推荐</div>
+        <!-- ==================== 5. 结算页 Overlay (完整模拟电商下单) ==================== -->
+        <div id="checkout-modal" class="fixed inset-0 bg-gray-100 z-40 hidden flex-col max-w-md mx-auto h-full overflow-y-auto no-scrollbar">
+            <!-- 结算 Header -->
+            <div class="bg-white px-4 py-3 border-b border-gray-100 flex items-center justify-between sticky top-0 z-10 pt-safe">
+                <button onclick="closeCheckout()" class="text-gray-600 text-lg"><i class="fa-solid fa-chevron-left"></i></button>
+                <h3 class="font-bold text-sm text-gray-900">确认订单</h3>
+                <span class="w-4"></span>
+            </div>
 
-        <div class="goods-list">
-            <div class="goods-item">
+            <div class="p-3 flex-1 pb-24">
+                <!-- 收货地址 -->
+                <div class="bg-white rounded-xl p-3 shadow-sm mb-3 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-location-dot text-nexusRed text-lg"></i>
+                        <div>
+                            <p class="text-xs font-bold text-gray-900">张先生 <span class="text-gray-500 font-normal ml-2">138****8888</span></p>
+                            <p class="text-[11px] text-gray-500 mt-0.5">北京市海淀区中关村南大街 1 号 A座808</p>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-gray-300 text-xs"></i>
+                </div>
+
+                <!-- 商品清单 -->
+                <div class="bg-white rounded-xl p-3 shadow-sm mb-3">
+                    <div id="checkout-items-container">
+                        <!-- 动态填充 -->
+                    </div>
+                </div>
+
+                <!-- 支付方式列表 -->
+                <div class="bg-white rounded-xl p-3 shadow-sm mb-3">
+                    <h4 class="text-xs font-bold text-gray-900 mb-3">支付方式</h4>
+                    
+                    <div class="space-y-3 text-xs">
+                        <!-- 微信支付 -->
+                        <label class="flex items-center justify-between cursor-pointer">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-brands fa-weixin text-green-500 text-lg"></i>
+                                <span>微信支付</span>
+                            </div>
+                            <input type="radio" name="pay_type" value="wechat" class="accent-nexusRed">
+                        </label>
+                        
+                        <!-- 支付宝 -->
+                        <label class="flex items-center justify-between cursor-pointer">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-brands fa-alipay text-blue-500 text-lg"></i>
+                                <span>支付宝</span>
+                            </div>
+                            <input type="radio" name="pay_type" value="alipay" class="accent-nexusRed">
+                        </label>
+
+                        <!-- 找好友代付 (反诈演示的核心关键选项) -->
+                        <label class="flex items-center justify-between cursor-pointer p-2 rounded-lg bg-red-50/50 border border-nexusRed/20">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-users text-nexusRed text-base"></i>
+                                <div>
+                                    <span class="font-bold text-nexusRed">找好友代付 / 生成代付链接</span>
+                                    <p class="text-[10px] text-gray-400">微信/QQ好友一键转发买单</p>
+                                </div>
+                            </div>
+                            <input type="radio" name="pay_type" value="friend" checked class="accent-nexusRed">
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 结算提交 Bottom Bar -->
+            <div class="fixed bottom-0 max-w-md w-full bg-white border-t border-gray-100 px-4 py-3 flex items-center justify-between z-20 pb-safe">
                 <div>
-                    <div class="goods-name">测试商品</div>
-                    <div class="goods-price"><small>¥</small>1.00</div>
+                    <span class="text-xs text-gray-500">应付金额:</span>
+                    <span class="text-nexusRed font-bold text-lg">¥<span id="checkout-total-price">68.80</span></span>
                 </div>
-                <button class="add-cart-btn" onclick="addGoods('测试商品', 1.00)">+</button>
-            </div>
-
-            <div class="goods-item">
-                <div>
-                    <div class="goods-name">【整果】金枕榴莲1个</div>
-                    <div class="goods-price"><small>¥</small>232.50</div>
-                </div>
-                <button class="add-cart-btn" onclick="addGoods('金枕榴莲', 232.50)">+</button>
-            </div>
-
-            <div class="goods-item">
-                <div>
-                    <div class="goods-name">【No.1回购】安睡裤</div>
-                    <div class="goods-price"><small>¥</small>68.80</div>
-                </div>
-                <button class="add-cart-btn" onclick="addGoods('安睡裤', 68.80)">+</button>
+                <button onclick="handleCheckoutSubmit()" class="bg-nexusRed text-white font-bold px-6 py-2.5 rounded-full text-xs shadow-lg active:scale-95 transition">
+                    提交订单
+                </button>
             </div>
         </div>
 
-        <div class="shop-cart-bar">
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <div class="cart-icon-box">
-                    🛒
-                    <div class="cart-badge" id="cartBadge">0</div>
+        <!-- ==================== 6. 隐蔽/精美的“选择代付通道”弹窗 ==================== -->
+        <div id="channel-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-end justify-center">
+            <div class="bg-white w-full max-w-md rounded-t-2xl p-4 animate-slide-up">
+                <div class="flex justify-between items-center pb-3 border-b border-gray-100">
+                    <div>
+                        <h3 class="font-bold text-sm text-gray-900 flex items-center gap-1.5">
+                            <i class="fa-solid fa-shield-halved text-nexusRed"></i> 选择代付演示模板通道
+                        </h3>
+                        <p class="text-[10px] text-gray-400 mt-0.5">模拟黑灰产聚合代付跳转收银台</p>
+                    </div>
+                    <button onclick="closeChannelModal()" class="text-gray-400 text-lg"><i class="fa-solid fa-xmark"></i></button>
                 </div>
-                <div style="font-size: 13px; color: #666;" id="cartStatusText">未选择商品</div>
+
+                <!-- 7 大平台模板卡片列表 -->
+                <div class="grid grid-cols-2 gap-2.5 my-4 max-h-80 overflow-y-auto no-scrollbar">
+                    <button onclick="selectPlatform('ctrip')" class="p-3 border rounded-xl border-gray-200 hover:border-blue-500 flex items-center gap-2.5 bg-blue-50/30 text-left active:scale-95 transition">
+                        <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs">携</div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-800">携程旅行</p>
+                            <p class="text-[9px] text-gray-400">携程代付专员</p>
+                        </div>
+                    </button>
+
+                    <button onclick="selectPlatform('meituan')" class="p-3 border rounded-xl border-gray-200 hover:border-amber-500 flex items-center gap-2.5 bg-amber-50/30 text-left active:scale-95 transition">
+                        <div class="w-8 h-8 rounded-full bg-amber-400 text-gray-900 flex items-center justify-center font-bold text-xs">美</div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-800">美团买单</p>
+                            <p class="text-[9px] text-gray-400">美团订单代付</p>
+                        </div>
+                    </button>
+
+                    <button onclick="selectPlatform('tb')" class="p-3 border rounded-xl border-gray-200 hover:border-orange-500 flex items-center gap-2.5 bg-orange-50/30 text-left active:scale-95 transition">
+                        <div class="w-8 h-8 rounded-full bg-orange-500 text-white flex items-center justify-center font-bold text-xs">淘</div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-800">淘宝代付</p>
+                            <p class="text-[9px] text-gray-400">亲友代付通道</p>
+                        </div>
+                    </button>
+
+                    <button onclick="selectPlatform('jd')" class="p-3 border rounded-xl border-gray-200 hover:border-red-500 flex items-center gap-2.5 bg-red-50/30 text-left active:scale-95 transition">
+                        <div class="w-8 h-8 rounded-full bg-red-600 text-white flex items-center justify-center font-bold text-xs">京</div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-800">京东收银</p>
+                            <p class="text-[9px] text-gray-400">京东好友买单</p>
+                        </div>
+                    </button>
+
+                    <button onclick="selectPlatform('pdd')" class="p-3 border rounded-xl border-gray-200 hover:border-red-500 flex items-center gap-2.5 bg-red-50/30 text-left active:scale-95 transition">
+                        <div class="w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center font-bold text-xs">拼</div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-800">拼多多</p>
+                            <p class="text-[9px] text-gray-400">多多好友代付</p>
+                        </div>
+                    </button>
+
+                    <button onclick="selectPlatform('didi')" class="p-3 border rounded-xl border-gray-200 hover:border-amber-600 flex items-center gap-2.5 bg-amber-50/30 text-left active:scale-95 transition">
+                        <div class="w-8 h-8 rounded-full bg-orange-400 text-white flex items-center justify-center font-bold text-xs">滴</div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-800">滴滴出行</p>
+                            <p class="text-[9px] text-gray-400">行程代付通道</p>
+                        </div>
+                    </button>
+
+                    <button onclick="selectPlatform('ctrip_hotel')" class="p-3 border rounded-xl border-gray-200 hover:border-blue-700 flex items-center gap-2.5 bg-blue-50/30 text-left active:scale-95 transition col-span-2">
+                        <div class="w-8 h-8 rounded-full bg-blue-800 text-white flex items-center justify-center font-bold text-xs">店</div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-800">携程酒店专享</p>
+                            <p class="text-[9px] text-gray-400">酒店预订代付界面</p>
+                        </div>
+                    </button>
+                </div>
             </div>
-            <button class="pay-submit-btn" onclick="toSelectTplPage()">去结算</button>
         </div>
+
+        <!-- ==================== 7. 大厂高仿代付收银台 (动态渲染平台) ==================== -->
+        <div id="cashier-modal" class="fixed inset-0 bg-gray-100 z-50 hidden flex-col max-w-md mx-auto h-full overflow-y-auto no-scrollbar">
+            <!-- 头部导航 -->
+            <div id="cashier-header" class="bg-white px-4 py-3 border-b border-gray-200 flex items-center justify-between sticky top-0 z-10 pt-safe">
+                <button onclick="closeCashier()" class="text-gray-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
+                <h3 id="cashier-title" class="font-bold text-sm text-gray-900">携程代付</h3>
+                <i class="fa-solid fa-ellipsis text-gray-500"></i>
+            </div>
+
+            <!-- 代付详情内容卡片 -->
+            <div class="p-4 flex-1">
+                <!-- 平台专属 Banner -->
+                <div id="cashier-platform-card" class="bg-white rounded-xl p-4 shadow-sm mb-4 text-center">
+                    <div id="cashier-avatar" class="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-lg mx-auto mb-2">携</div>
+                    <h4 id="cashier-subname" class="font-bold text-xs text-gray-800">携程代付专员</h4>
+                    <p class="text-[10px] text-gray-400 mt-0.5">携程在手，说走就走~</p>
+
+                    <div class="mt-4 pt-4 border-t border-gray-100">
+                        <span class="text-xs text-gray-500">需付款</span>
+                        <div class="text-2xl font-extrabold text-gray-900 mt-1">
+                            ¥ <span id="cashier-price">68.80</span>
+                        </div>
+                        <div class="inline-flex items-center gap-1 bg-gray-100 px-2 py-0.5 rounded text-[10px] text-gray-500 mt-2">
+                            <span>支付剩余时间</span>
+                            <span id="timer-min" class="bg-gray-800 text-white px-1 rounded">14</span>:
+                            <span id="timer-sec" class="bg-gray-800 text-white px-1 rounded">59</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 订单摘要 -->
+                <div class="bg-white rounded-xl p-3 shadow-sm text-xs space-y-2">
+                    <div class="text-gray-400 font-medium border-b border-gray-50 pb-1.5">付款须知</div>
+                    <div class="flex justify-between text-gray-600 text-[11px]">
+                        <span>订单名称</span>
+                        <span id="cashier-item-name" class="font-bold text-gray-800">安睡裤 x 1</span>
+                    </div>
+                    <div class="flex justify-between text-gray-600 text-[11px]">
+                        <span>订单号</span>
+                        <span class="font-mono text-gray-500">NEXUS20261108992</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 底部支付按钮 -->
+            <div class="p-4 bg-white border-t border-gray-100 pb-safe">
+                <button onclick="processPayment()" id="cashier-btn" class="w-full bg-blue-600 text-white font-bold py-3 rounded-full text-xs shadow-lg active:scale-95 transition flex items-center justify-center gap-2">
+                    <span id="btn-text">确认支付 ¥<span id="cashier-btn-price">68.80</span></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- ==================== 8. 真实“支付成功 / 订单完成”结果页 ==================== -->
+        <div id="success-modal" class="fixed inset-0 bg-white z-50 hidden flex-col max-w-md mx-auto h-full overflow-y-auto no-scrollbar">
+            <!-- 头部 -->
+            <div class="px-4 py-3 border-b border-gray-100 flex items-center justify-between sticky top-0 bg-white z-10 pt-safe">
+                <span class="w-6"></span>
+                <h3 class="font-bold text-sm text-gray-900">支付结果</h3>
+                <button onclick="resetToHome()" class="text-xs font-bold text-nexusRed">完成</button>
+            </div>
+
+            <!-- 成功主体 -->
+            <div class="p-6 text-center flex-1 flex flex-col items-center justify-center">
+                <!-- 成功绿勾图标 -->
+                <div class="w-16 h-16 bg-emerald-500 text-white rounded-full flex items-center justify-center text-3xl shadow-lg shadow-emerald-200 mb-4 animate-bounce">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+
+                <h3 class="text-lg font-extrabold text-gray-900">支付成功</h3>
+                <p class="text-xs text-gray-400 mt-1">代付已生效，订单正在为您处理中</p>
+
+                <div class="text-3xl font-black text-gray-900 my-5">
+                    ¥<span id="success-amount">68.80</span>
+                </div>
+
+                <!-- 订单详情列表 -->
+                <div class="w-full bg-gray-50 rounded-2xl p-4 text-xs space-y-2.5 text-left border border-gray-100 mb-6">
+                    <div class="flex justify-between">
+                        <span class="text-gray-400">交易单号</span>
+                        <span class="font-mono text-gray-800 font-semibold" id="success-trade-no">NX20261108889123</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-400">支付方式</span>
+                        <span class="text-gray-800 font-medium" id="success-platform-name">携程代付</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-400">支付时间</span>
+                        <span class="text-gray-800 font-medium" id="success-time">2026-11-08 10:30:15</span>
+                    </div>
+                </div>
+
+                <!-- 按钮组 -->
+                <div class="w-full space-y-2">
+                    <button onclick="resetToHome()" class="w-full bg-nexusRed text-white font-bold py-3 rounded-full text-xs shadow-md active:scale-95 transition">
+                        返回商城首页
+                    </button>
+                    <button onclick="showToast('已进入订单详情')" class="w-full bg-gray-100 text-gray-700 font-bold py-3 rounded-full text-xs active:scale-95 transition">
+                        查看订单详情
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast 简易提示框 -->
+        <div id="toast" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/80 text-white text-xs px-4 py-2 rounded-full z-50 opacity-0 pointer-events-none transition duration-300">
+            提示信息
+        </div>
+
     </div>
 
-    <!-- 2. 选择收银台模板（已添加您要求的 7 大平台） -->
-    <div id="pageSelectTpl" class="page-container">
-        <div class="pay-select-header">
-            <span class="back-icon" onclick="showPage('pageShop')">❮</span>
-            选择收银台 - XILI PAY
-        </div>
-
-        <div class="order-summary-card">
-            <div class="summary-row">
-                <span>订单摘要</span>
-                <span id="tplGoodsName">测试商品 x1</span>
-            </div>
-            <div class="summary-total">
-                <span>应付金额</span>
-                <span style="color: #ff3b30;" id="tplGoodsPrice">¥ 1.00</span>
-            </div>
-        </div>
-
-        <div class="tpl-modal-box">
-            <div class="tpl-title">选择收银台模板皮肤</div>
-            <div class="tpl-list">
-                <div class="tpl-option active" onclick="selectTpl(this, '携程', '携', '#0086f6', '#fff')">
-                    <div class="tpl-option-left"><div class="tpl-icon" style="background: #0086f6;">携</div><span>携程</span></div>
-                    <div class="radio-dot"></div>
-                </div>
-                <div class="tpl-option" onclick="selectTpl(this, '京东', '京', '#e1251b', '#fff')">
-                    <div class="tpl-option-left"><div class="tpl-icon" style="background: #e1251b;">京</div><span>京东</span></div>
-                    <div class="radio-dot"></div>
-                </div>
-                <div class="tpl-option" onclick="selectTpl(this, '淘宝', '淘', '#ff5000', '#fff')">
-                    <div class="tpl-option-left"><div class="tpl-icon" style="background: #ff5000;">淘</div><span>淘宝</span></div>
-                    <div class="radio-dot"></div>
-                </div>
-                <div class="tpl-option" onclick="selectTpl(this, '美团', '美', '#ffd101', '#333')">
-                    <div class="tpl-option-left"><div class="tpl-icon" style="background: #ffd101; color:#333;">美</div><span>美团</span></div>
-                    <div class="radio-dot"></div>
-                </div>
-                <div class="tpl-option" onclick="selectTpl(this, '滴滴出行', '滴', '#ff7d00', '#fff')">
-                    <div class="tpl-option-left"><div class="tpl-icon" style="background: #ff7d00;">滴</div><span>滴滴出行</span></div>
-                    <div class="radio-dot"></div>
-                </div>
-                <div class="tpl-option" onclick="selectTpl(this, '拼多多', '拼', '#e02e24', '#fff')">
-                    <div class="tpl-option-left"><div class="tpl-icon" style="background: #e02e24;">拼</div><span>拼多多</span></div>
-                    <div class="radio-dot"></div>
-                </div>
-                <div class="tpl-option" onclick="selectTpl(this, '携程酒店', '酒', '#0055ff', '#fff')">
-                    <div class="tpl-option-left"><div class="tpl-icon" style="background: #0055ff;">酒</div><span>携程酒店</span></div>
-                    <div class="radio-dot"></div>
-                </div>
-            </div>
-        </div>
-
-        <button class="confirm-gen-btn" onclick="genPayPage()">确认生成代付页面</button>
-    </div>
-
-    <!-- 3. 动态匹配的高仿收银台 -->
-    <div id="pagePayDynamic" class="page-container pay-page">
-        <div class="pay-header">
-            <span style="font-size: 18px; cursor: pointer;" onclick="showPage('pageSelectTpl')">✕</span>
-            <span id="dynNavTitle">收银台</span>
-            <span style="font-size: 18px;">···</span>
-        </div>
-
-        <div class="pay-user-box">
-            <div class="pay-avatar" id="dynAvatar">🛍️</div>
-            <div>
-                <div style="font-weight: bold;" id="dynUserName">平台官方特约商户</div>
-                <div style="font-size: 11px; color: #888; margin-top: 2px;" id="dynUserSub">安全交易·极速认证</div>
-            </div>
-        </div>
-
-        <div class="pay-card">
-            <div style="font-size: 14px; color: #666;">需付款</div>
-            <div class="pay-amount"><span>¥</span> <b id="dynPayAmount">1.00</b></div>
-            <div class="pay-timer">
-                支付剩余时间 
-                <span class="timer-badge">15</span> : <span class="timer-badge" id="secTimer">00</span>
-            </div>
-        </div>
-
-        <div class="pay-notice">
-            <b>付款须知</b><br>
-            1. 订单创建成功后15分钟内未付款，订单将自动取消。<br>
-            2. 退款成功后，实付款金额将原路退回。
-        </div>
-
-        <button class="pay-action-btn" id="dynActionBtn" onclick="alert('【反诈警示】录屏演示：此处点击支付后，资金将实时流向诈骗分子的聚合支付账户！')">确认支付</button>
-
-        <div class="pay-order-box">
-            <div style="font-size: 13px; color: #888; margin-bottom: 12px;" id="dynOrderType">订单摘要</div>
-            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 14px;">
-                <span id="dynGoodsName" style="color: #333; font-weight: bold;">测试商品</span>
-                <span style="font-weight: bold;" id="dynGoodsPrice">¥ 1.00</span>
-            </div>
-            <div style="font-size: 11px; color: #aaa; margin-top: 4px;">x 1</div>
-        </div>
-
-        <div class="pay-footer-logo" id="dynFooterLogo">安全支付网关</div>
-    </div>
-
+    <!-- JavaScript 交互逻辑 -->
     <script>
-        let currentGoods = { name: '测试商品', price: 1.00 };
-        // 默认选中携程
-        let currentTpl = { name: '携程', icon: '携', color: '#0086f6', text: '#fff' };
+        // 1. 全局数据状态
+        let currentCart = [
+            { name: "【特惠组合装】舒适全棉极薄安睡裤", price: 68.80, qty: 1, img: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=500&auto=format&fit=crop&q=60" }
+        ];
 
-        function addGoods(name, price) {
-            currentGoods = { name, price };
-            document.getElementById('cartBadge').innerText = '1';
-            document.getElementById('cartStatusText').innerText = name + ' (¥' + price.toFixed(2) + ')';
-            
-            const toast = document.getElementById('toast');
-            toast.style.display = 'block';
-            setTimeout(() => { toast.style.display = 'none'; }, 1500);
-        }
+        let selectedPlatform = 'ctrip';
 
-        function showPage(pageId) {
-            document.querySelectorAll('.page-container').forEach(p => p.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
-            window.scrollTo(0,0);
-        }
+        // 平台渲染配置
+        const platformConfigs = {
+            ctrip: { title: "携程代付", name: "携程代付专员", sub: "携程在手，说走就走~", bg: "bg-blue-600", btn: "bg-blue-600" },
+            meituan: { title: "美团代付", name: "美团买单专员", sub: "美团外卖，送什么都快", bg: "bg-amber-400 text-gray-900", btn: "bg-amber-400 text-gray-900" },
+            tb: { title: "淘宝亲友代付", name: "淘宝亲情卡代付", sub: "太好逛了吧", bg: "bg-orange-500", btn: "bg-orange-500" },
+            jd: { title: "京东好友代付", name: "京东代付服务", sub: "多快好省", bg: "bg-red-600", btn: "bg-red-600" },
+            pdd: { title: "拼多多代付", name: "多多好友买单", sub: "拼的多，省的多", bg: "bg-red-500", btn: "bg-red-500" },
+            didi: { title: "滴滴代付", name: "滴滴出行代付", sub: "滴滴一下，美好出行", bg: "bg-amber-600", btn: "bg-amber-600" },
+            ctrip_hotel: { title: "携程酒店预订代付", name: "携程酒店专员", sub: "订酒店，上携程", bg: "bg-blue-800", btn: "bg-blue-800" }
+        };
 
-        function toSelectTplPage() {
-            document.getElementById('tplGoodsName').innerText = currentGoods.name + ' x1';
-            document.getElementById('tplGoodsPrice').innerText = '¥ ' + currentGoods.price.toFixed(2);
-            showPage('pageSelectTpl');
-        }
-
-        function selectTpl(el, name, icon, color, text) {
-            document.querySelectorAll('.tpl-option').forEach(o => o.classList.remove('active'));
-            el.classList.add('active');
-            currentTpl = { name, icon, color, text };
-        }
-
-        function genPayPage() {
-            // 联动填充商品数据
-            document.getElementById('dynGoodsName').innerText = currentGoods.name;
-            document.getElementById('dynGoodsPrice').innerText = '¥ ' + currentGoods.price.toFixed(2);
-            document.getElementById('dynPayAmount').innerText = currentGoods.price.toFixed(2);
-
-            // 联动渲染所选模板的专属视觉与文案
-            document.getElementById('dynNavTitle').innerText = currentTpl.name;
-            document.getElementById('dynFooterLogo').innerText = currentTpl.name + ' · 安全支付';
-            
-            const avatar = document.getElementById('dynAvatar');
-            avatar.innerText = currentTpl.icon;
-            avatar.style.background = currentTpl.color;
-            avatar.style.color = currentTpl.text;
-
-            if (currentTpl.name === '携程' || currentTpl.name === '携程酒店') {
-                document.getElementById('dynUserName').innerText = currentTpl.name + '代付专员';
-                document.getElementById('dynUserSub').innerText = '携程在手，说走就走~';
-                document.getElementById('dynOrderType').innerText = currentTpl.name === '携程酒店' ? '酒店民宿订单' : '机票/度假订单';
-            } else if (currentTpl.name === '京东') {
-                document.getElementById('dynUserName').innerText = '京东商城好友代付';
-                document.getElementById('dynUserSub').innerText = '多快好省，品质保障';
-                document.getElementById('dynOrderType').innerText = '京东自营订单';
-            } else if (currentTpl.name === '淘宝') {
-                document.getElementById('dynUserName').innerText = '淘宝好物 · 找人代付';
-                document.getElementById('dynUserSub').innerText = '朋友代付：请确认对方身份再付款';
-                document.getElementById('dynOrderType').innerText = '淘宝交易订单';
-            } else if (currentTpl.name === '美团') {
-                document.getElementById('dynUserName').innerText = '奶盖小团子 ฅ⁠(⁠̀⁠ᴗ⁠́⁠ฅ⁠)';
-                document.getElementById('dynUserSub').innerText = 'Hi~ 你和我的距离只差一顿外卖~';
-                document.getElementById('dynOrderType').innerText = '美团外卖订单';
-            } else if (currentTpl.name === '滴滴出行') {
-                document.getElementById('dynUserName').innerText = '滴滴出行代付通道';
-                document.getElementById('dynUserSub').innerText = '美好出行，一路相伴';
-                document.getElementById('dynOrderType').innerText = '网约车行程订单';
-            } else if (currentTpl.name === '拼多多') {
-                document.getElementById('dynUserName').innerText = '拼多多砍价代付';
-                document.getElementById('dynUserSub').innerText = '拼着买，更便宜';
-                document.getElementById('dynOrderType').innerText = '拼团购物订单';
-            }
-
-            // 渲染按钮专属配色与文案
-            const btn = document.getElementById('dynActionBtn');
-            btn.style.backgroundColor = currentTpl.color;
-            btn.style.color = currentTpl.text;
-            btn.innerText = currentTpl.name === '美团' ? '为好友买单' : '确认支付 ¥' + currentGoods.price.toFixed(2);
-
-            showPage('pagePayDynamic');
+        // 2. 页面加载与切换
+        window.onload = function() {
+            renderCartUI();
             startTimer();
         }
 
-        let sec = 0;
+        function switchTab(tabName) {
+            document.querySelectorAll('.view-tab').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+
+            // 导航图标高亮
+            ['home', 'category', 'cart', 'user'].forEach(t => {
+                const navBtn = document.getElementById(`nav-${t}`);
+                if (t === tabName) {
+                    navBtn.className = "flex flex-col items-center justify-center text-nexusRed";
+                } else {
+                    navBtn.className = "flex flex-col items-center justify-center text-gray-400 hover:text-gray-600";
+                }
+            });
+
+            // 购物车吸底栏控制
+            const cartBottom = document.getElementById('cart-bottom-bar');
+            if (tabName === 'cart') {
+                cartBottom.classList.remove('hidden');
+            } else {
+                cartBottom.classList.add('hidden');
+            }
+        }
+
+        // 3. 购物车逻辑
+        function updateCartQty(change) {
+            if (currentCart.length > 0) {
+                currentCart[0].qty += change;
+                if (currentCart[0].qty < 1) currentCart[0].qty = 1;
+                renderCartUI();
+            }
+        }
+
+        function renderCartUI() {
+            const item = currentCart[0];
+            if (item) {
+                document.getElementById('cart-item-qty').innerText = item.qty;
+                const total = (item.price * item.qty).toFixed(2);
+                document.getElementById('cart-total-price').innerText = total;
+                document.getElementById('checkout-total-price').innerText = total;
+                document.getElementById('cashier-price').innerText = total;
+                document.getElementById('cashier-btn-price').innerText = total;
+            }
+        }
+
+        // 4. 结算与通道选择
+        function goToCheckout() {
+            const container = document.getElementById('checkout-items-container');
+            const item = currentCart[0];
+            container.innerHTML = `
+                <div class="flex items-center gap-3">
+                    <img src="${item.img}" class="w-14 h-14 rounded-lg object-cover bg-gray-100" />
+                    <div class="flex-1">
+                        <h4 class="text-xs font-semibold text-gray-800">${item.name}</h4>
+                        <p class="text-[10px] text-gray-400 mt-1">数量: x${item.qty}</p>
+                        <p class="text-nexusRed font-bold text-xs mt-1">¥${item.price.toFixed(2)}</p>
+                    </div>
+                </div>
+            `;
+            document.getElementById('checkout-modal').classList.remove('hidden');
+            document.getElementById('checkout-modal').classList.add('flex');
+        }
+
+        function closeCheckout() {
+            document.getElementById('checkout-modal').classList.add('hidden');
+            document.getElementById('checkout-modal').classList.remove('flex');
+        }
+
+        function handleCheckoutSubmit() {
+            const payType = document.querySelector('input[name="pay_type"]:checked').value;
+            if (payType === 'friend') {
+                // 打开隐藏通道选择
+                document.getElementById('channel-modal').classList.remove('hidden');
+            } else {
+                showToast("非代付测试模式，请选择‘找好友代付’");
+            }
+        }
+
+        function closeChannelModal() {
+            document.getElementById('channel-modal').classList.add('hidden');
+        }
+
+        // 5. 代付高仿收银台
+        function selectPlatform(key) {
+            selectedPlatform = key;
+            const config = platformConfigs[key];
+            document.getElementById('cashier-title').innerText = config.title;
+            document.getElementById('cashier-subname').innerText = config.name;
+            document.getElementById('cashier-avatar').className = `w-12 h-12 rounded-full text-white flex items-center justify-center font-bold text-lg mx-auto mb-2 ${config.bg}`;
+            document.getElementById('cashier-btn').className = `w-full text-white font-bold py-3 rounded-full text-xs shadow-lg active:scale-95 transition ${config.btn}`;
+            
+            closeChannelModal();
+            closeCheckout();
+            document.getElementById('cashier-modal').classList.remove('hidden');
+            document.getElementById('cashier-modal').classList.add('flex');
+        }
+
+        function closeCashier() {
+            document.getElementById('cashier-modal').classList.add('hidden');
+            document.getElementById('cashier-modal').classList.remove('flex');
+        }
+
+        // 6. 真实支付处理流程（无警示弹窗，直接跳转成功页）
+        function processPayment() {
+            const btn = document.getElementById('cashier-btn');
+            const btnText = document.getElementById('btn-text');
+            
+            // 按钮转圈 Loading 模拟逼真支付响应
+            btnText.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin text-base"></i> 正在安全支付...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                // 恢复按钮文本
+                btnText.innerHTML = `确认支付 ¥<span id="cashier-btn-price">${document.getElementById('cashier-price').innerText}</span>`;
+                btn.disabled = false;
+
+                // 准备成功页数据
+                const config = platformConfigs[selectedPlatform];
+                document.getElementById('success-platform-name').innerText = config.title;
+                document.getElementById('success-amount').innerText = document.getElementById('cashier-price').innerText;
+                
+                // 随机生成交易单号和当前时间
+                document.getElementById('success-trade-no').innerText = 'NX' + Date.now();
+                const now = new Date();
+                document.getElementById('success-time').innerText = now.getFullYear() + '-' + 
+                    String(now.getMonth() + 1).padStart(2, '0') + '-' + 
+                    String(now.getDate()).padStart(2, '0') + ' ' + 
+                    String(now.getHours()).padStart(2, '0') + ':' + 
+                    String(now.getMinutes()).padStart(2, '0') + ':' + 
+                    String(now.getSeconds()).padStart(2, '0');
+
+                // 关闭收银台，打开成功页
+                closeCashier();
+                document.getElementById('success-modal').classList.remove('hidden');
+                document.getElementById('success-modal').classList.add('flex');
+            }, 1200);
+        }
+
+        function resetToHome() {
+            document.getElementById('success-modal').classList.add('hidden');
+            document.getElementById('success-modal').classList.remove('flex');
+            switchTab('home');
+        }
+
+        // 隐蔽入口触控 (长按 Logo 快速调用通道)
+        function triggerSecretMenu() {
+            document.getElementById('channel-modal').classList.remove('hidden');
+        }
+
+        // Toast
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.classList.remove('opacity-0');
+            setTimeout(() => toast.classList.add('opacity-0'), 2000);
+        }
+
+        // 倒计时
         function startTimer() {
+            let sec = 899;
             setInterval(() => {
-                sec = (sec + 1) % 60;
-                let displaySec = 59 - sec;
-                document.getElementById('secTimer').innerText = displaySec < 10 ? '0' + displaySec : displaySec;
+                if (sec > 0) sec--;
+                const m = Math.floor(sec / 60);
+                const s = sec % 60;
+                document.getElementById('timer-min').innerText = m < 10 ? '0' + m : m;
+                document.getElementById('timer-sec').innerText = s < 10 ? '0' + s : s;
             }, 1000);
         }
     </script>
