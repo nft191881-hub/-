@@ -5,58 +5,51 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>橘子商城</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; -webkit-tap-highlight-color: transparent; }
     body { background-color: #f4f5f7; color: #333; padding-bottom: 70px; user-select: none; }
     
-    /* 顶部导航与搜索 */
     .header { position: sticky; top: 0; background: #fff; z-index: 100; padding: 10px 16px; border-bottom: 1px solid #eee; }
     .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
-    .logo { font-size: 20px; font-weight: 800; color: #ff6b00; letter-spacing: -0.5px; cursor: pointer; }
-    .logo span { font-size: 11px; background: #ff6b00; color: #fff; padding: 2px 5px; border-radius: 4px; margin-left: 4px; vertical-align: middle; }
-    .search-bar { display: flex; align-items: center; background: #f0f1f5; border-radius: 20px; padding: 8px 14px; font-size: 13px; color: #999; flex: 1; margin: 0 12px; cursor: pointer; }
-    .tabs-nav { display: flex; gap: 20px; overflow-x: auto; padding-top: 4px; font-size: 14px; color: #666; font-weight: 500; }
-    .tabs-nav .tab-item { cursor: pointer; white-space: nowrap; padding-bottom: 4px; }
-    .tabs-nav .tab-item.active { color: #ff6b00; font-weight: 700; border-bottom: 2px solid #ff6b00; }
+    .logo { font-size: 20px; font-weight: 800; color: #ff6b00; cursor: pointer; }
+    .logo span { font-size: 11px; background: #ff6b00; color: #fff; padding: 2px 5px; border-radius: 4px; margin-left: 4px; }
+    .search-bar { display: flex; align-items: center; background: #f0f1f5; border-radius: 20px; padding: 8px 14px; font-size: 13px; color: #999; flex: 1; margin-left: 12px; cursor: pointer; }
+    .tabs-nav { display: flex; gap: 20px; overflow-x: auto; padding-top: 4px; font-size: 14px; color: #666; }
+    .tab-item { cursor: pointer; white-space: nowrap; padding-bottom: 4px; }
+    .tab-item.active { color: #ff6b00; font-weight: 700; border-bottom: 2px solid #ff6b00; }
 
-    /* 各页面 View 控制 */
     .view-section { display: none; }
     .view-section.active { display: block; }
     
-    /* 首页 Banner & 菜单 */
-    .banner { margin: 12px 16px; height: 110px; background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); border-radius: 12px; display: flex; flex-direction: column; justify-content: center; padding: 0 20px; color: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+    .banner { margin: 12px 16px; height: 105px; background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); border-radius: 12px; display: flex; flex-direction: column; justify-content: center; padding: 0 20px; }
     .banner h3 { font-size: 18px; margin-bottom: 4px; color: #d63031; }
-    .banner p { font-size: 12px; color: #d63031; opacity: 0.8; }
+    .banner p { font-size: 12px; color: #d63031; opacity: 0.85; }
     .grid-menu { display: grid; grid-template-columns: repeat(5, 1fr); padding: 12px 16px; text-align: center; background: #fff; margin-bottom: 10px; }
     .grid-item { display: flex; flex-direction: column; align-items: center; font-size: 11px; color: #555; cursor: pointer; }
-    .grid-icon { width: 44px; height: 44px; border-radius: 50%; background: #fff4e6; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 6px; }
+    .grid-icon { width: 42px; height: 42px; border-radius: 50%; background: #fff4e6; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 6px; }
 
-    /* 商品瀑布流 */
     .section-title { font-size: 16px; font-weight: 700; padding: 12px 16px 8px; display: flex; justify-content: space-between; align-items: center; }
     .section-title span { font-size: 12px; font-weight: normal; color: #999; cursor: pointer; }
     .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 16px; }
     .product-card { background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.03); cursor: pointer; }
-    .product-img { width: 100%; height: 160px; object-fit: cover; background: #eee; }
+    .product-img { width: 100%; height: 155px; object-fit: cover; background: #eee; }
     .product-info { padding: 10px; }
     .product-tag { font-size: 10px; color: #ff6b00; border: 1px solid #ff6b00; border-radius: 2px; padding: 0 3px; margin-right: 4px; }
-    .product-title { font-size: 13px; font-weight: 600; line-height: 1.4; height: 36px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; margin-bottom: 8px; }
+    .product-title { font-size: 13px; font-weight: 600; line-height: 1.4; height: 36px; overflow: hidden; margin-bottom: 8px; }
     .product-bottom { display: flex; justify-content: space-between; align-items: flex-end; }
     .product-price { font-size: 16px; color: #ff6b00; font-weight: 700; }
-    .product-price span { font-size: 11px; }
     .product-sales { font-size: 10px; color: #999; }
 
-    /* 分类 View */
     .category-container { display: flex; background: #fff; min-height: calc(100vh - 120px); }
-    .cat-sidebar { width: 90px; background: #f8f8f8; font-size: 13px; color: #666; }
-    .cat-item { padding: 16px 12px; text-align: center; cursor: pointer; }
+    .cat-sidebar { width: 88px; background: #f8f8f8; font-size: 13px; color: #666; }
+    .cat-item { padding: 16px 10px; text-align: center; cursor: pointer; }
     .cat-item.active { background: #fff; color: #ff6b00; font-weight: bold; border-left: 3px solid #ff6b00; }
-    .cat-content { flex: 1; padding: 16px; }
+    .cat-content { flex: 1; padding: 12px; }
 
-    /* “我的” 个人中心 View */
     .user-header { background: linear-gradient(135deg, #ff8c00, #ff5500); padding: 30px 20px 20px; color: #fff; display: flex; align-items: center; gap: 16px; }
-    .avatar { width: 60px; height: 60px; border-radius: 50%; border: 2px solid #fff; }
+    .avatar { width: 60px; height: 60px; border-radius: 50%; border: 2px solid #fff; object-fit: cover; }
     .user-name { font-size: 18px; font-weight: bold; }
-    .user-tag { font-size: 11px; background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 10px; margin-top: 4px; display: inline-block; }
-    .order-card { background: #fff; margin: 12px 16px; border-radius: 12px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+    .user-tag { font-size: 11px; background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 10px; margin-top: 4px; display: inline-block; cursor: pointer; }
+    .order-card { background: #fff; margin: 12px 16px; border-radius: 12px; padding: 16px; }
     .card-title { font-size: 14px; font-weight: bold; margin-bottom: 14px; display: flex; justify-content: space-between; }
     .order-status-grid { display: grid; grid-template-columns: repeat(4, 1fr); text-align: center; font-size: 12px; color: #666; }
     .status-item { cursor: pointer; }
@@ -64,18 +57,15 @@
     .menu-list { background: #fff; margin: 12px 16px; border-radius: 12px; overflow: hidden; }
     .menu-row { display: flex; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid #f8f8f8; font-size: 14px; color: #444; cursor: pointer; }
 
-    /* 底部 4-Tab 导航栏 */
     .tabbar { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 1px solid #eee; height: 56px; display: flex; justify-content: space-around; align-items: center; z-index: 100; }
     .tab-btn { display: flex; flex-direction: column; align-items: center; font-size: 10px; color: #888; position: relative; flex: 1; cursor: pointer; }
     .tab-btn.active { color: #ff6b00; }
     .tab-btn svg { width: 22px; height: 22px; fill: currentColor; margin-bottom: 2px; }
     .badge { position: absolute; top: -2px; right: 28%; background: #ff6b00; color: #fff; font-size: 10px; padding: 1px 5px; border-radius: 10px; font-weight: bold; }
 
-    /* 公用通用弹窗 / Toast */
     .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 300; display: none; align-items: flex-end; }
     .modal.active { display: flex; }
-    .modal-content { background: #fff; width: 100%; border-radius: 16px 16px 0 0; max-height: 85vh; overflow-y: auto; padding: 16px; position: relative; animation: slideUp 0.25s ease-out; }
-    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    .modal-content { background: #fff; width: 100%; border-radius: 16px 16px 0 0; max-height: 85vh; overflow-y: auto; padding: 16px; position: relative; }
     .close-btn { position: absolute; top: 16px; right: 16px; font-size: 20px; color: #999; width: 30px; height: 30px; text-align: center; line-height: 30px; cursor: pointer; }
     .detail-img { width: 100%; height: 240px; object-fit: cover; border-radius: 10px; margin-bottom: 12px; }
     .detail-price { font-size: 22px; color: #ff6b00; font-weight: bold; margin-bottom: 6px; }
@@ -85,18 +75,15 @@
     .btn-cart { background: #ffe8d6; color: #ff6b00; }
     .btn-buy { background: #ff6b00; color: #fff; }
 
-    /* 购物车界面 */
     .cart-item { display: flex; align-items: center; background: #fff; padding: 12px; border-radius: 10px; margin: 12px 16px; gap: 12px; }
     .checkbox { width: 18px; height: 18px; border-radius: 50%; border: 2px solid #ddd; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-    .checkbox.checked { background: #ff6b00; border-color: #ff6b00; }
-    .checkbox.checked::after { content: '✓'; color: #fff; font-size: 12px; }
+    .checkbox.checked { background: #ff6b00; border-color: #ff6b00; color: #fff; font-size: 12px; }
     .cart-img { width: 70px; height: 70px; border-radius: 8px; object-fit: cover; }
     .cart-detail { flex: 1; }
     .cart-title { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
     .checkout-footer { position: fixed; bottom: 56px; left: 0; right: 0; background: #fff; padding: 10px 16px; border-top: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; z-index: 99; }
     .total-price { font-size: 16px; font-weight: bold; color: #ff6b00; }
 
-    /* 代付渠道 Panel */
     .channel-sheet { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 400; display: none; justify-content: flex-end; flex-direction: column; }
     .channel-sheet.active { display: flex; }
     .sheet-body { background: #fff; border-radius: 16px 16px 0 0; padding: 20px 16px; }
@@ -106,27 +93,22 @@
     .channel-left { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 14px; }
     .channel-icon { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #fff; font-weight: bold; }
 
-    /* 真正收银台 */
     .pay-page { position: fixed; inset: 0; background: #f5f5f5; z-index: 500; display: none; flex-direction: column; }
     .pay-page.active { display: flex; }
     .pay-header { background: #fff; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e8e8e8; font-size: 16px; font-weight: bold; }
-    .pay-card { background: #fff; margin: 16px; border-radius: 12px; padding: 20px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+    .pay-card { background: #fff; margin: 16px; border-radius: 12px; padding: 20px; text-align: center; }
     .pay-amount { font-size: 32px; font-weight: 800; margin: 10px 0 20px; }
     .pay-btn-group { margin-top: auto; padding: 16px; background: #fff; }
     .pay-submit-btn { width: 100%; height: 46px; border-radius: 23px; border: none; font-size: 16px; font-weight: bold; color: #fff; cursor: pointer; }
 
-    /* 支付成功结果页 */
     .success-page { position: fixed; inset: 0; background: #fff; z-index: 600; display: none; flex-direction: column; align-items: center; padding-top: 60px; }
     .success-page.active { display: flex; }
     .success-icon { width: 70px; height: 70px; background: #07c160; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 36px; margin-bottom: 16px; }
 
-    /* 通用提示小弹窗 (Toast) */
-    .toast { position: fixed; top: 40%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.75); color: #fff; padding: 12px 20px; border-radius: 8px; font-size: 14px; z-index: 999; display: none; text-align: center; }
-    .toast.active { display: block; animation: fadeInOut 1.5s ease; }
-    @keyframes fadeInOut { 0% { opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { opacity: 0; } }
+    .toast { position: fixed; top: 42%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); color: #fff; padding: 12px 22px; border-radius: 8px; font-size: 14px; z-index: 999; display: none; text-align: center; }
+    .toast.active { display: block; }
 
-    /* 全局 Spinner */
-    .loading-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.8); z-index: 700; display: none; align-items: center; justify-content: center; flex-direction: column; font-size: 13px; color: #666; }
+    .loading-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.85); z-index: 700; display: none; align-items: center; justify-content: center; flex-direction: column; font-size: 13px; color: #666; }
     .loading-overlay.active { display: flex; }
     .spinner { width: 32px; height: 32px; border: 3px solid #f3f3f3; border-top: 3px solid #ff6b00; border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 10px; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -134,10 +116,9 @@
 </head>
 <body>
 
-  <!-- 顶部 Header -->
   <div class="header" id="main-header">
     <div class="header-top">
-      <div class="logo" onclick="showToast('欢迎来到橘子商城首页')">橘子<span>精选</span></div>
+      <div class="logo" onclick="showToast('欢迎来到橘子商城')">橘子<span>精选</span></div>
       <div class="search-bar" onclick="openSearchModal()">🔍 搜索全球好物、安睡裤...</div>
     </div>
     <div class="tabs-nav" id="home-tabs">
@@ -148,24 +129,22 @@
     </div>
   </div>
 
-  <!-- 1. 首页 View -->
   <div id="view-home" class="view-section active">
     <div class="banner">
       <h3>橘子商城·全场包邮</h3>
       <p>支持好友代付 狂欢抢购中</p>
     </div>
     <div class="grid-menu">
-      <div class="grid-item" onclick="handleGridClick('限时秒杀')"><div class="grid-icon">⚡</div>秒杀</div>
-      <div class="grid-item" onclick="handleGridClick('代付福利专区')"><div class="grid-icon">🎁</div>代付</div>
-      <div class="grid-item" onclick="handleGridClick('领券中心已发放')"><div class="grid-icon">🎫</div>领券</div>
-      <div class="grid-item" onclick="handleGridClick('热销榜单实时更新')"><div class="grid-icon">🛒</div>热销</div>
-      <div class="grid-item" onclick="handleGridClick('VIP会员尊享9.8折')"><div class="grid-icon">🛡️</div>尊享</div>
+      <div class="grid-item" onclick="showToast('已进入限时秒杀专场')"><div class="grid-icon">⚡</div>秒杀</div>
+      <div class="grid-item" onclick="showToast('已激活好友代付立减特权')"><div class="grid-icon">🎁</div>代付</div>
+      <div class="grid-item" onclick="showToast('已领取 30 元通用神券')"><div class="grid-icon">🎫</div>领券</div>
+      <div class="grid-item" onclick="showToast('正在查看全站热销榜单')"><div class="grid-icon">🛒</div>热销</div>
+      <div class="grid-item" onclick="showToast('VIP会员享全场顺丰包邮')"><div class="grid-icon">🛡️</div>尊享</div>
     </div>
-    <div class="section-title">猜你喜欢 <span onclick="showToast('已为您刷新换一批商品')">换一批 ↻</span></div>
+    <div class="section-title">猜你喜欢 <span onclick="showToast('已为您刷新最新爆款')">换一批 ↻</span></div>
     <div class="product-grid" id="product-list"></div>
   </div>
 
-  <!-- 2. 分类 View -->
   <div id="view-category" class="view-section">
     <div class="category-container">
       <div class="cat-sidebar">
@@ -181,7 +160,6 @@
     </div>
   </div>
 
-  <!-- 3. 购物车 View -->
   <div id="view-cart" class="view-section">
     <div class="section-title">我的购物车</div>
     <div id="cart-container"></div>
@@ -191,35 +169,33 @@
     </div>
   </div>
 
-  <!-- 4. 我的（个人中心） View -->
   <div id="view-user" class="view-section">
     <div class="user-header">
-      <img class="avatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop" alt="头像">
+      <img class="avatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop" alt="">
       <div>
         <div class="user-name">橘子用户_8829</div>
-        <div class="user-tag" onclick="showToast('您当前已是最高级VIP会员')">VIP 尊享会员 ⚙</div>
+        <div class="user-tag" onclick="showToast('VIP 尊享会员有效期至 2027-12-31')">VIP 尊享会员 ⚙</div>
       </div>
     </div>
 
     <div class="order-card">
-      <div class="card-title">我的订单 <span style="font-size:12px; color:#ff6b00; font-weight:normal; cursor:pointer;" onclick="showToast('正在打开全部订单列表')">查看全部 ➔</span></div>
+      <div class="card-title">我的订单 <span style="font-size:12px; color:#ff6b00; font-weight:normal; cursor:pointer;" onclick="showToast('共 2 笔历史已完成订单')">查看全部 ➔</span></div>
       <div class="order-status-grid">
-        <div class="status-item" onclick="showToast('暂无待付款订单')"><div class="status-icon">💳</div>待付款</div>
-        <div class="status-item" onclick="showToast('订单已进入备货状态')"><div class="status-icon">📦</div>待发货</div>
-        <div class="status-item" onclick="showToast('暂无待收货包裹')"><div class="status-icon">🚚</div>待收货</div>
+        <div class="status-item" onclick="showToast('当前无待付款订单')"><div class="status-icon">💳</div>待付款</div>
+        <div class="status-item" onclick="showToast('仓库正在加急打包中')"><div class="status-icon">📦</div>待发货</div>
+        <div class="status-item" onclick="showToast('顺丰快递运输中')"><div class="status-icon">🚚</div>待收货</div>
         <div class="status-item" onclick="showToast('暂无待评价商品')"><div class="status-icon">💬</div>待评价</div>
       </div>
     </div>
 
     <div class="menu-list">
-      <div class="menu-row" onclick="showToast('收货地址：北京市朝阳区科技园区88号')"><span>📍 收货地址管理</span><span>➔</span></div>
-      <div class="menu-row" onclick="showToast('您有 3 张无门槛代金券可使用')"><span>🎫 优惠券中心</span><span>➔</span></div>
-      <div class="menu-row" onclick="showToast('专属客服小橘正在为您接入...')"><span>🎧 24小时在线客服</span><span>➔</span></div>
-      <div class="menu-row" onclick="showToast('当前版本：v3.5.2 已经是最新版')"><span>⚙️ 账户安全与设置</span><span>➔</span></div>
+      <div class="menu-row" onclick="showToast('默认地址：北京市朝阳区建国路88号')"><span>📍 收货地址管理</span><span>➔</span></div>
+      <div class="menu-row" onclick="showToast('可用优惠券：3张')"><span>🎫 优惠券中心</span><span>➔</span></div>
+      <div class="menu-row" onclick="showToast('专属客服小橘在线为您服务')"><span>🎧 24小时在线客服</span><span>➔</span></div>
+      <div class="menu-row" onclick="showToast('账号安全等级：高')"><span>⚙️ 账户安全与设置</span><span>➔</span></div>
     </div>
   </div>
 
-  <!-- 底部 4-Tab 导航栏 -->
   <div class="tabbar">
     <div class="tab-btn active" onclick="switchView('home', this)">
       <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>首页
@@ -236,7 +212,6 @@
     </div>
   </div>
 
-  <!-- 商品详情 Modal 弹窗 -->
   <div class="modal" id="product-modal">
     <div class="modal-content">
       <div class="close-btn" onclick="closeModal()">✕</div>
@@ -250,43 +225,40 @@
     </div>
   </div>
 
-  <!-- 搜索弹出 Modal -->
   <div class="modal" id="search-modal">
-    <div class="modal-content" style="height: 60vh;">
+    <div class="modal-content" style="height: 55vh;">
       <div class="close-btn" onclick="closeSearchModal()">✕</div>
       <div style="font-weight:bold; margin-bottom:12px;">全网好物搜索</div>
       <div style="display:flex; gap:8px; margin-bottom:16px;">
         <input type="text" id="search-input-box" placeholder="请输入商品关键词..." style="flex:1; padding:8px 12px; border:1px solid #ddd; border-radius:6px; outline:none;">
         <button class="btn btn-buy" style="flex:initial; padding:0 16px; height:38px;" onclick="doSearch()">搜索</button>
       </div>
-      <div style="font-size:12px; color:#888; margin-bottom:8px;">热门搜索词：</div>
+      <div style="font-size:12px; color:#888; margin-bottom:8px;">热门搜索：</div>
       <div style="display:flex; gap:8px; flex-wrap:wrap;">
         <span style="background:#f0f1f5; padding:4px 10px; border-radius:4px; font-size:12px; cursor:pointer;" onclick="quickSearch('安睡裤')">安睡裤</span>
         <span style="background:#f0f1f5; padding:4px 10px; border-radius:4px; font-size:12px; cursor:pointer;" onclick="quickSearch('蓝牙耳机')">蓝牙耳机</span>
         <span style="background:#f0f1f5; padding:4px 10px; border-radius:4px; font-size:12px; cursor:pointer;" onclick="quickSearch('运动手表')">运动手表</span>
-        <span style="background:#f0f1f5; padding:4px 10px; border-radius:4px; font-size:12px; cursor:pointer;" onclick="quickSearch('咖啡豆')">咖啡豆</span>
       </div>
     </div>
   </div>
 
-  <!-- 隐藏代付渠道 Panel -->
   <div class="channel-sheet" id="channel-sheet">
     <div class="sheet-body">
       <div class="sheet-header">选择好友代付结算通道</div>
       <div class="channel-list">
-        <div class="channel-item" onclick="triggerPay('ctrip', '携程旅行', '#0086F6')">
+        <div class="channel-item" onclick="triggerPay('携程旅行', '#0086F6')">
           <div class="channel-left"><div class="channel-icon" style="background:#0086F6">携</div>携程旅行 代付通道</div>➜
         </div>
-        <div class="channel-item" onclick="triggerPay('meituan', '美团外卖买单', '#FFC001')">
+        <div class="channel-item" onclick="triggerPay('美团外卖买单', '#FFC001')">
           <div class="channel-left"><div class="channel-icon" style="background:#FFC001">美</div>美团外卖 代付通道</div>➜
         </div>
-        <div class="channel-item" onclick="triggerPay('taobao', '淘宝好友代付', '#FF5500')">
+        <div class="channel-item" onclick="triggerPay('淘宝好友代付', '#FF5500')">
           <div class="channel-left"><div class="channel-icon" style="background:#FF5500">淘</div>淘宝好友 代付通道</div>➜
         </div>
-        <div class="channel-item" onclick="triggerPay('jd', '京东订单代付', '#E1251B')">
+        <div class="channel-item" onclick="triggerPay('京东订单代付', '#E1251B')">
           <div class="channel-left"><div class="channel-icon" style="background:#E1251B">京</div>京东代付 通道</div>➜
         </div>
-        <div class="channel-item" onclick="triggerPay('pdd', '拼多多拼单代付', '#E02E24')">
+        <div class="channel-item" onclick="triggerPay('拼多多拼单代付', '#E02E24')">
           <div class="channel-left"><div class="channel-icon" style="background:#E02E24">拼</div>拼多多代付 通道</div>➜
         </div>
       </div>
@@ -294,7 +266,6 @@
     </div>
   </div>
 
-  <!-- 高仿大厂收银台 Page -->
   <div class="pay-page" id="pay-page">
     <div class="pay-header">
       <span onclick="closePayPage()" style="cursor:pointer;">✕</span>
@@ -314,7 +285,6 @@
     </div>
   </div>
 
-  <!-- 支付成功结果页 -->
   <div class="success-page" id="success-page">
     <div class="success-icon">✓</div>
     <h2 style="font-size:20px; font-weight:bold; margin-bottom:8px;">代付成功</h2>
@@ -322,63 +292,89 @@
     <button class="btn btn-buy" style="width:200px;" onclick="location.reload()">返回橘子商城</button>
   </div>
 
-  <!-- 全局 Toast 提示框 -->
   <div class="toast" id="toast-box">提示信息</div>
 
-  <!-- 全局 Loading -->
   <div class="loading-overlay" id="loading">
     <div class="spinner"></div>
     <div id="loading-text">正在安全连接支付通道...</div>
   </div>
 
   <script>
-    const products = [
+    var products = [
       { id: 1, title: '【特惠组合装】舒适全棉极薄安睡裤 (L码 12片/包)', price: '68.80', sales: '2.4万+', img: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=500&auto=format&fit=crop' },
       { id: 2, title: '主动降噪无线蓝牙头戴式耳机 高解析音质', price: '299.00', sales: '8500+', img: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&auto=format&fit=crop' },
       { id: 3, title: '智能运动手表 多功能健康监测心率血氧', price: '199.00', sales: '1.2万+', img: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&auto=format&fit=crop' },
       { id: 4, title: '手冲咖啡便携滤袋 手工烘焙浓郁咖啡豆', price: '45.00', sales: '5600+', img: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=500&auto=format&fit=crop' }
     ];
 
-    let currentSelectedProduct = products[0];
+    var currentSelectedProduct = products[0];
+    var toastTimer = null;
 
     function showToast(msg) {
-      const box = document.getElementById('toast-box');
+      var box = document.getElementById('toast-box');
+      if (!box) return;
       box.innerText = msg;
       box.classList.add('active');
-      setTimeout(() => box.classList.remove('active'), 1500);
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(function() {
+        box.classList.remove('active');
+      }, 1500);
     }
 
-    function renderProducts(list = products, targetId = 'product-list') {
-      const html = list.map(p => `
-        <div class="product-card" onclick="openProductDetail(${p.id})">
-          <img class="product-img" src="${p.img}">
-          <div class="product-info">
-            <div class="product-title"><span class="product-tag">爆款</span>${p.title}</div>
-            <div class="product-bottom">
-              <div class="product-price"><span>¥</span>${p.price}</div>
-              <div class="product-sales">已售 ${p.sales}</div>
-            </div>
-          </div>
-        </div>
-      `).join('');
-      document.getElementById(targetId).innerHTML = html;
+    function renderProducts(list, targetId) {
+      list = list || products;
+      targetId = targetId || 'product-list';
+      var container = document.getElementById(targetId);
+      if (!container) return;
+      var html = '';
+      for (var i = 0; i < list.length; i++) {
+        var p = list[i];
+        html += '<div class="product-card" onclick="openProductDetail(' + p.id + ')">' +
+          '<img class="product-img" src="' + p.img + '">' +
+          '<div class="product-info">' +
+            '<div class="product-title"><span class="product-tag">爆款</span>' + p.title + '</div>' +
+            '<div class="product-bottom">' +
+              '<div class="product-price"><span>¥</span>' + p.price + '</div>' +
+              '<div class="product-sales">已售 ' + p.sales + '</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      }
+      container.innerHTML = html;
     }
 
     function renderCart() {
-      document.getElementById('cart-container').innerHTML = `
-        <div class="cart-item">
-          <div class="checkbox checked" onclick="this.classList.toggle('checked')"></div>
-          <img class="cart-img" src="${currentSelectedProduct.img}">
-          <div class="cart-detail">
-            <div class="cart-title">${currentSelectedProduct.title}</div>
-            <div style="color:#ff6b00; font-weight:bold;">¥${currentSelectedProduct.price}</div>
-          </div>
-        </div>
-      `;
+      var container = document.getElementById('cart-container');
+      if (!container) return;
+      container.innerHTML = '<div class="cart-item">' +
+        '<div class="checkbox checked" onclick="toggleCheck(this)">✓</div>' +
+        '<img class="cart-img" src="' + currentSelectedProduct.img + '">' +
+        '<div class="cart-detail">' +
+          '<div class="cart-title">' + currentSelectedProduct.title + '</div>' +
+          '<div style="color:#ff6b00; font-weight:bold;">¥' + currentSelectedProduct.price + '</div>' +
+        '</div>' +
+      '</div>';
+      var priceEl = document.getElementById('cart-total-price');
+      if (priceEl) priceEl.innerText = '¥' + currentSelectedProduct.price;
+    }
+
+    function toggleCheck(el) {
+      if (el.classList.contains('checked')) {
+        el.classList.remove('checked');
+        el.innerText = '';
+      } else {
+        el.classList.add('checked');
+        el.innerText = '✓';
+      }
     }
 
     function openProductDetail(id) {
-      currentSelectedProduct = products.find(item => item.id === id);
+      for (var i = 0; i < products.length; i++) {
+        if (products[i].id === id) {
+          currentSelectedProduct = products[i];
+          break;
+        }
+      }
       document.getElementById('m-img').src = currentSelectedProduct.img;
       document.getElementById('m-title').innerText = currentSelectedProduct.title;
       document.getElementById('m-price').innerText = '¥ ' + currentSelectedProduct.price;
@@ -393,41 +389,51 @@
       closeModal();
       renderCart();
       showToast('已成功加入购物车');
-      switchView('cart', document.querySelectorAll('.tab-btn')[2]);
+      var tabs = document.querySelectorAll('.tab-btn');
+      if (tabs[2]) switchView('cart', tabs[2]);
     }
 
     function switchView(viewName, el) {
-      document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById(`view-${viewName}`).classList.add('active');
+      var views = document.querySelectorAll('.view-section');
+      for (var i = 0; i < views.length; i++) {
+        views[i].classList.remove('active');
+      }
+      var tabs = document.querySelectorAll('.tab-btn');
+      for (var j = 0; j < tabs.length; j++) {
+        tabs[j].classList.remove('active');
+      }
+      var target = document.getElementById('view-' + viewName);
+      if (target) target.classList.add('active');
       if (el) el.classList.add('active');
 
-      const mainHeader = document.getElementById('main-header');
-      if (viewName === 'home' || viewName === 'category') {
-        mainHeader.style.display = 'block';
-      } else {
-        mainHeader.style.display = 'none';
+      var mainHeader = document.getElementById('main-header');
+      if (mainHeader) {
+        mainHeader.style.display = (viewName === 'home' || viewName === 'category') ? 'block' : 'none';
       }
     }
 
     function switchHomeTab(idx, el) {
-      document.querySelectorAll('#home-tabs .tab-item').forEach(t => t.classList.remove('active'));
-      el.classList.add('active');
-      if (idx === 0) renderProducts(products, 'product-list');
-      else renderProducts([products[idx % products.length]], 'product-list');
-      showToast('切换频道成功');
+      var tabs = document.querySelectorAll('#home-tabs .tab-item');
+      for (var i = 0; i < tabs.length; i++) {
+        tabs[i].classList.remove('active');
+      }
+      if (el) el.classList.add('active');
+      if (idx === 0) {
+        renderProducts(products, 'product-list');
+      } else {
+        renderProducts([products[idx % products.length]], 'product-list');
+      }
     }
 
     function switchCat(idx, el) {
-      document.querySelectorAll('.cat-item').forEach(t => t.classList.remove('active'));
-      el.classList.add('active');
-      const cats = ['热门推荐专区', '数码3C专区', '美妆护肤专区', '居家生活专区'];
+      var items = document.querySelectorAll('.cat-item');
+      for (var i = 0; i < items.length; i++) {
+        items[i].classList.remove('active');
+      }
+      if (el) el.classList.add('active');
+      var cats = ['热门推荐专区', '数码3C专区', '美妆护肤专区', '居家生活专区'];
       document.getElementById('cat-title-text').innerText = cats[idx];
-      renderProducts([products[idx % products.length], products[(idx+1)%products.length]], 'cat-product-list');
-    }
-
-    function handleGridClick(title) {
-      showToast('进入：' + title);
+      renderProducts([products[idx % products.length], products[(idx + 1) % products.length]], 'cat-product-list');
     }
 
     function openSearchModal() {
@@ -439,7 +445,7 @@
     }
 
     function doSearch() {
-      const val = document.getElementById('search-input-box').value;
+      var val = document.getElementById('search-input-box').value;
       closeSearchModal();
       showToast('正在为您搜索: ' + (val || '全部商品'));
     }
@@ -458,15 +464,16 @@
       document.getElementById('channel-sheet').classList.remove('active');
     }
 
-    function triggerPay(type, name, color) {
+    function triggerPay(name, color) {
       closeSheet();
-      const load = document.getElementById('loading');
+      var load = document.getElementById('loading');
       document.getElementById('loading-text').innerText = '正在安全连接 ' + name + ' 通道...';
       load.classList.add('active');
-      setTimeout(() => {
+      setTimeout(function() {
         load.classList.remove('active');
         document.getElementById('pay-platform-title').innerText = name + '代付专员';
         document.getElementById('pay-amount-val').innerText = '¥ ' + currentSelectedProduct.price;
+        document.getElementById('pay-item-desc').innerHTML = '商品订单：' + currentSelectedProduct.title + '<br>代付说明：您的朋友邀请您帮忙付此笔订单。';
         document.getElementById('pay-submit-btn').style.background = color;
         document.getElementById('pay-page').classList.add('active');
       }, 600);
@@ -477,17 +484,17 @@
     }
 
     function executePay() {
-      const load = document.getElementById('loading');
+      var load = document.getElementById('loading');
       document.getElementById('loading-text').innerText = '正在提交扣款交易...';
       load.classList.add('active');
-      setTimeout(() => {
+      setTimeout(function() {
         load.classList.remove('active');
         document.getElementById('pay-page').classList.remove('active');
         document.getElementById('success-page').classList.add('active');
       }, 1200);
     }
 
-    renderProducts();
+    renderProducts(products, 'product-list');
     renderProducts(products, 'cat-product-list');
     renderCart();
   </script>
