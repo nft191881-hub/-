@@ -1,0 +1,45 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "title": "【特惠组合装】舒适全棉极薄安睡裤 (L码 12片/包)",
+      "price": 68.8,
+      "sales": "2.4万+",
+      "img": "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=800&auto=format&fit=crop&q=80",
+      "stock": 50,
+      "tag": "爆款",
+      "category": "热门推荐"
+    },
+    {
+      "id": 2,
+      "title": "主动降噪无线蓝牙头戴式耳机 高解析音质",
+      "price": 299,
+      "sales": "8500+",
+      "img": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&auto=format&fit=crop&q=80",
+      "stock": 30,
+      "tag": "爆款",
+      "category": "数码3C"
+    },
+    {
+      "id": 3,
+      "title": "智能运动手表 多功能健康监测心率血氧",
+      "price": 199,
+      "sales": "1.2万+",
+      "img": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&auto=format&fit=crop&q=80",
+      "stock": 40,
+      "tag": "热门",
+      "category": "数码3C"
+    },
+    {
+      "id": 4,
+      "title": "手冲咖啡便携滤袋 手工烘焙浓郁咖啡豆",
+      "price": 45,
+      "sales": "5600+",
+      "img": "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=800&auto=format&fit=crop&q=80",
+      "stock": 99,
+      "tag": "热卖",
+      "category": "居家生活"
+    }
+  ],
+  "orders": []
+}
