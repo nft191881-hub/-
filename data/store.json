@@ -39,6 +39,106 @@
       "stock": 99,
       "tag": "热卖",
       "category": "居家生活"
+    },
+    {
+      "id": 5,
+      "title": "轻便帆布托特包 日常通勤购物袋",
+      "price": 39.9,
+      "sales": "3200+",
+      "img": "https://images.unsplash.com/photo-1544816155-12df9643f363?w=800&auto=format&fit=crop&q=80",
+      "stock": 60,
+      "tag": "新品",
+      "category": "服饰鞋包"
+    },
+    {
+      "id": 6,
+      "title": "便携保温随行杯 304不锈钢水杯",
+      "price": 59,
+      "sales": "6100+",
+      "img": "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=800&auto=format&fit=crop&q=80",
+      "stock": 80,
+      "tag": "热卖",
+      "category": "居家生活"
+    },
+    {
+      "id": 7,
+      "title": "无线蓝牙音箱 迷你便携户外音响",
+      "price": 129,
+      "sales": "2700+",
+      "img": "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=800&auto=format&fit=crop&q=80",
+      "stock": 35,
+      "tag": "精选",
+      "category": "数码3C"
+    },
+    {
+      "id": 8,
+      "title": "简约陶瓷马克杯 带杯盖家用咖啡杯",
+      "price": 32.5,
+      "sales": "1800+",
+      "img": "https://images.unsplash.com/photo-1514228742587-6b1558f93f?w=800&auto=format&fit=crop&q=80",
+      "stock": 70,
+      "tag": "精选",
+      "category": "居家生活"
+    },
+    {
+      "id": 9,
+      "title": "女士防晒遮阳帽 轻薄透气户外帽",
+      "price": 46,
+      "sales": "4900+",
+      "img": "https://images.unsplash.com/photo-1521369909029-2afed882baee?w=800&auto=format&fit=crop&q=80",
+      "stock": 45,
+      "tag": "夏日热卖",
+      "category": "服饰鞋包"
+    },
+    {
+      "id": 10,
+      "title": "柔软亲肤纯棉毛巾 两条装",
+      "price": 25.8,
+      "sales": "7800+",
+      "img": "https://images.unsplash.com/photo-1600369671236-e74521d4b6ad?w=800&auto=format&fit=crop&q=80",
+      "stock": 120,
+      "tag": "实惠装",
+      "category": "居家生活"
+    },
+    {
+      "id": 11,
+      "title": "桌面手机支架 可调节折叠款",
+      "price": 19.9,
+      "sales": "9300+",
+      "img": "https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=800&auto=format&fit=crop&q=80",
+      "stock": 100,
+      "tag": "实用好物",
+      "category": "数码3C"
+    },
+    {
+      "id": 12,
+      "title": "香氛护手霜礼盒 滋润保湿三支装",
+      "price": 79,
+      "sales": "2100+",
+      "img": "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=800&auto=format&fit=crop&q=80",
+      "stock": 55,
+      "tag": "礼盒装",
+      "category": "美妆护肤"
+    },
+    {
+      "id": 13,
+      "title": "居家香薰蜡烛 温暖木质调",
+      "price": 88,
+      "sales": "1500+",
+      "img": "https://images.unsplash.com/photo-1603006905003-be475563bc59?w=800&auto=format&fit=crop&q=80",
+      "stock": 28,
+      "tag": "氛围好物",
+      "category": "居家生活"
+    },
+    {
+      "id": 14,
+      "title": "轻量缓震运动鞋 男女休闲跑步鞋",
+      "price": 239,
+      "sales": "3600+",
+      "img": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&auto=format&fit=crop&q=80",
+      "stock": 24,
+      "tag": "新品",
+      "category": "服饰鞋包"
     }
   ],
   "orders": []
